@@ -12,10 +12,13 @@ class RowCalendarWeekDayTitle extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Row(
-      children: CalendarUtils.weekDaysTitle(calendarType)
-          .map((day) => Expanded(child: Center(child: Text(day))))
-          .toList(),
+    return Padding(
+      padding: const EdgeInsets.symmetric(vertical: 8.0),
+      child: Row(
+        children: CalendarUtils.weekDaysTitle(calendarType)
+            .map((day) => Expanded(child: Center(child: Text(day))))
+            .toList(),
+      ),
     );
   }
 }
