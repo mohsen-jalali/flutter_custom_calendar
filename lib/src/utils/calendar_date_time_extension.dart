@@ -1,4 +1,5 @@
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
+import 'package:shamsi_date/shamsi_date.dart';
 
 extension CalendarDateTimeExtension on CalendarDateTime {
   CalendarDateTime get increaseYear {
@@ -21,5 +22,46 @@ extension CalendarDateTimeExtension on CalendarDateTime {
       return decreaseYear;
     }
     return CalendarDateTime(year, month - 1, 1, calendarType: calendarType);
+  }
+
+  bool get isBeforeNow{
+    if(calendarType == CalendarType.jalali){
+      return Jalali.now().compareTo(toJalali) == 1;
+    }
+    return DateTime.now().compareTo(toDateTime) == 1;
+  }
+
+  Jalali get toJalali{
+    return Jalali(year,month,day);
+  }
+
+  DateTime get toDateTime{
+    return DateTime(year,month,day);
+  }
+
+  int isAfter(CalendarDateTime dateTime){
+    if(year > dateTime.year){
+      return 1;
+    }
+    else if(year < dateTime.year){
+      return -1;
+    }
+    else{
+      if(month > dateTime.month){
+        return 1;
+      }
+      else if(month < dateTime.month){
+        return -1;
+      }
+      else{
+        if(day > dateTime.day){
+          return 1;
+        }
+        else if(day < dateTime.day){
+          return -1;
+        }
+        return 0;
+      }
+    }
   }
 }
