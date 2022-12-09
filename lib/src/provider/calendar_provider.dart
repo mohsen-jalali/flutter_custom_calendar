@@ -7,7 +7,7 @@ import 'package:shamsi_date/shamsi_date.dart';
 class CalendarProvider extends ChangeNotifier {
   final CalendarType calendarType;
 
-  CalendarProvider( {
+  CalendarProvider({
     required this.calendarType,
   }) {
     if (calendarType == CalendarType.jalali) {
@@ -19,8 +19,42 @@ class CalendarProvider extends ChangeNotifier {
   }
 
   late CalendarDateTime currentTime;
+  CalendarDateTime? selectedDate;
   List<CalendarDateTime> calendarDates = [];
+  PageController pageController = PageController(initialPage: 1000);
+  int currentPage = 1000;
 
+  void goToNextPage() {
+    pageController.nextPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+  }
+
+  void goToPreviousPage() {
+    pageController.previousPage(
+        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+  }
+
+  void onChangeMonthPageView(int index) {
+    if (currentPage > index) {
+      decreaseMonth();
+    }
+    if (currentPage < index) {
+      increaseMonth();
+    }
+    currentPage = index;
+  }
+
+  void selectDate(CalendarDateTime date) {
+    selectedDate = date;
+    notifyListeners();
+    if (currentTime.month != date.month) {
+      if (currentTime.isAfter(date) == 1) {
+        goToPreviousPage();
+      } else if (currentTime.isAfter(date) == -1) {
+        goToNextPage();
+      }
+    }
+  }
 
   void increaseMonth() {
     currentTime = currentTime.increaseMonth;
@@ -42,7 +76,6 @@ class CalendarProvider extends ChangeNotifier {
         calculateGregorianDateTimes();
         break;
     }
-
     notifyListeners();
   }
 
@@ -52,7 +85,6 @@ class CalendarProvider extends ChangeNotifier {
       calendarDates.add(
         CalendarDateTime.fromJalali(
           jalali.subtract(Duration(days: index)),
-          dateType: CalendarDateType.previousMonth,
         ),
       );
     }
@@ -66,7 +98,6 @@ class CalendarProvider extends ChangeNotifier {
       for (int index = jalali.weekDay; index <= 7; index++) {
         calendarDates.add(CalendarDateTime.fromJalali(
           jalali,
-          dateType: CalendarDateType.nextMonth,
         ));
         jalali = jalali.addDays(1);
       }
@@ -78,7 +109,6 @@ class CalendarProvider extends ChangeNotifier {
     for (int index = dateTime.weekday; index > 1; index--) {
       calendarDates.add(CalendarDateTime.fromDateTime(
         dateTime.subtract(Duration(days: index - 1)),
-        dateType: CalendarDateType.previousMonth,
       ));
     }
     while (dateTime.month == currentTime.month) {
@@ -93,7 +123,6 @@ class CalendarProvider extends ChangeNotifier {
       for (int index = dateTime.weekday; index <= 7; index++) {
         calendarDates.add(CalendarDateTime.fromDateTime(
           dateTime,
-          dateType: CalendarDateType.nextMonth,
         ));
         dateTime = dateTime.add(const Duration(days: 1));
       }
