@@ -1,20 +1,26 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/src/model/custom_day_model.dart';
+import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
+import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
 import 'package:flutter_custom_calendar/src/widgets/calendar_day_widget.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
+import 'package:provider/provider.dart';
 
 class CalendarMonthlyWidget extends StatelessWidget {
   final PageController pageController;
   final List<CalendarDateTime> calendarDates;
   final Function(int) onMonthChanged;
+  final Function(CalendarDateTime) onSelectDate;
   final CalendarDayModel? calendarDayModel;
+
+
 
   const CalendarMonthlyWidget({
     Key? key,
     required this.calendarDates,
     required this.pageController,
     required this.onMonthChanged,
+    required this.onSelectDate,
     this.calendarDayModel,
   }) : super(key: key);
 
@@ -22,7 +28,6 @@ class CalendarMonthlyWidget extends StatelessWidget {
   Widget build(BuildContext context) {
     return AnimatedContainer(
       height: calculateHeight,
-      color: Colors.red,
       width: MediaQuery.of(context).size.width,
       duration: const Duration(milliseconds: 300),
       child: PageView.builder(
@@ -44,7 +49,15 @@ class CalendarMonthlyWidget extends StatelessWidget {
                 child: FadeInAnimation(
                   child: CalendarDayWidget(
                     calendarDateTime: calendarDates[index],
-                    calendarDayModel: calendarDayModel,
+                    calendarDateModel: calendarDayModel,
+                    isSelected: context.read<CalendarProvider>().selectedDate ==
+                        calendarDates[index],
+                    isOverFlow:
+                        context.read<CalendarProvider>().currentTime.month !=
+                            calendarDates[index].month,
+                    onSelectDate: () {
+                      onSelectDate.call(calendarDates[index]);
+                    },
                   ),
                 ),
               ),
