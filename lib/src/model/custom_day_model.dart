@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
 
 class CalendarDayModel {
   final double? height;
   final double? width;
   final Color? backgroundColor;
+  final Color? selectedBackgroundColor;
   final Color? disableDayBackgroundColor;
-  final TextStyle? dayTitleStyle;
-  final Decoration Function(CalendarDateType)? decoration;
+  final TextStyle? style;
+  final TextStyle? selectedStyle;
+  final TextStyle? disableStyle;
+  final Decoration? decoration;
+  final Decoration? selectedDecoration;
+  final Decoration? disableDecoration;
   final EdgeInsets? padding;
-
+  final bool showOverFlowDays;
+  final bool disablePastDays;
 
   const CalendarDayModel({
     this.height,
@@ -17,7 +22,14 @@ class CalendarDayModel {
     this.backgroundColor,
     this.decoration,
     this.padding,
-    this.dayTitleStyle,
+    this.style,
+    this.selectedStyle,
+    this.disableStyle,
     this.disableDayBackgroundColor,
+    this.selectedBackgroundColor,
+    this.selectedDecoration,
+    this.disableDecoration,
+    this.showOverFlowDays = false,
+    this.disablePastDays = false,
   });
 }
