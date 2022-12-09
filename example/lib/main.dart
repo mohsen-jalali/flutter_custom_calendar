@@ -37,17 +37,36 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.start,
-          children: const [
-            CustomCalendar(
-              calendarType: CalendarType.jalali,
-              calendarDayModel:  CalendarDayModel(
-                backgroundColor: Colors.green,
-                disableDayBackgroundColor: Colors.transparent
+        child: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 16),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.start,
+            children:  [
+              CustomCalendar(
+                calendarType: CalendarType.jalali,
+                headerModel: const HeaderModel(
+                  padding: EdgeInsets.symmetric(horizontal: 8,vertical: 10)
+                ),
+                calendarDayModel:  CalendarDayModel(
+                  backgroundColor: Colors.green,
+                  showOverFlowDays: false,
+                  disablePastDays: true,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.green,
+                  ),
+                  disableStyle: TextStyle(
+                    fontSize: 16,
+                    color: Colors.black.withOpacity(0.4)
+                  ),
+                  disableDayBackgroundColor: Colors.transparent
+                ),
               ),
-            ),
-          ],
+            ],
+          ),
         ),
       ),
     );
