@@ -26,9 +26,9 @@ extension CalendarDateTimeExtension on CalendarDateTime {
 
   bool get isBeforeNow{
     if(calendarType == CalendarType.jalali){
-      return Jalali.now().compareTo(toJalali) == 1;
+      return CalendarDateTime.fromJalali(Jalali.now()).isAfter(this) == 1;
     }
-    return DateTime.now().compareTo(toDateTime) == 1;
+    return CalendarDateTime.fromDateTime(DateTime.now()).isAfter(this)  == 1;
   }
 
   Jalali get toJalali{
