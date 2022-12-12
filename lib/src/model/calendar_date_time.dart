@@ -23,7 +23,7 @@ class CalendarDateTime {
         dateTime.year,
         dateTime.month,
         dateTime.day,
-        calendarType: CalendarType.jalali,
+        calendarType: CalendarType.gregorian,
       );
 
   factory CalendarDateTime.fromJalali(Jalali jalali) =>
