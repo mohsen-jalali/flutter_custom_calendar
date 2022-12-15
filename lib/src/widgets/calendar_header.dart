@@ -1,18 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/src/model/custom_header_model.dart';
 import 'package:flutter_custom_calendar/src/utils/date_utils.dart';
 
 class CalendarHeader extends StatelessWidget {
   final CalendarDateTime calendarDateTime;
   final VoidCallback onPressNext;
   final VoidCallback onPressPrevious;
+  final VoidCallback onPressCurrentDate;
   final HeaderModel? headerModel;
+
   const CalendarHeader({
     Key? key,
     required this.calendarDateTime,
     required this.onPressNext,
     required this.onPressPrevious,
+    required this.onPressCurrentDate,
     this.headerModel,
   }) : super(key: key);
 
@@ -32,19 +34,29 @@ class CalendarHeader extends StatelessWidget {
           Expanded(
             child: Row(
               children: [
-                Text(
-                  "${CalendarUtils.getMonthNameByIndex(calendarDateTime.month, calendarDateTime.calendarType, context)} ${calendarDateTime.year}",
-                  style: headerModel?.titleStyle ?? const TextStyle(
-                    fontSize: 18,
+                Expanded(
+                  child: Text(
+                    "${CalendarUtils.getMonthNameByIndex(calendarDateTime.month, calendarDateTime.calendarType, context)} ${calendarDateTime.year}",
+                    style: headerModel?.titleStyle ??
+                        const TextStyle(
+                          fontSize: 18,
+                        ),
                   ),
                 ),
+                IconButton(
+                  onPressed: onPressCurrentDate,
+                  icon: const Icon(
+                    Icons.today,
+                    color: Colors.black,
+                  ),
+                )
               ],
             ),
           ),
           IconButton(
             onPressed: onPressNext,
             splashRadius: 20,
-            icon:  Icon(
+            icon: Icon(
               Icons.arrow_forward,
               color: headerModel?.iconsColor ?? Colors.black,
             ),
