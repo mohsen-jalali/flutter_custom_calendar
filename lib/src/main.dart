@@ -10,26 +10,26 @@ import 'package:provider/provider.dart';
 
 class CustomCalendar extends StatelessWidget {
   final CalendarType calendarType;
-  final bool includeDisableDays;
   final CalendarDateTime? selectedDate;
   final Function(CalendarDateTime)? onSelectDate;
   final CalendarDayModel? calendarDayModel;
   final HeaderModel? headerModel;
   final Color? backgroundColor;
-  final Decoration? backgroundDecoration;
+  final Decoration? calendarDecoration;
   final EdgeInsets? padding;
+  final CalendarMode calendarMode;
 
   const CustomCalendar({
     Key? key,
     this.calendarType = CalendarType.gregorian,
-    this.includeDisableDays = true,
     this.selectedDate,
     this.onSelectDate,
     this.calendarDayModel,
     this.backgroundColor,
-    this.backgroundDecoration,
+    this.calendarDecoration,
     this.padding,
     this.headerModel,
+    this.calendarMode = CalendarMode.monthlyTable,
   }) : super(key: key);
 
   @override
@@ -39,7 +39,7 @@ class CustomCalendar extends StatelessWidget {
       child: Container(
         padding: padding,
         clipBehavior: Clip.antiAlias,
-        decoration: backgroundDecoration ??
+        decoration: calendarDecoration ??
             BoxDecoration(
                 color: Colors.white,
                 borderRadius: BorderRadius.circular(10),
@@ -50,40 +50,23 @@ class CustomCalendar extends StatelessWidget {
                     blurRadius: 10,
                   )
                 ]),
-        child: MultiProvider(
-          providers: [
-            ChangeNotifierProvider(
-              create: (_) => CalendarProvider(
-                calendarType: calendarType,
-              ),
-            ),
-          ],
-          builder: (context, child) => Column(
-            children: [
-              CalendarHeader(
-                calendarDateTime: context.watch<CalendarProvider>().currentTime,
-                onPressNext: () {
-                  context.read<CalendarProvider>().goToNextPage();
-                },
-                onPressPrevious: () {
-                  context.read<CalendarProvider>().goToPreviousPage();
-                },
-                headerModel: headerModel,
-              ),
-              Consumer<CalendarProvider>(
-                builder: (context, provider, child) => CalendarMonthlyWidget(
-                  pageController: provider.pageController,
-                  onMonthChanged: provider.onChangeMonthPageView,
-                  onSelectDate: (calendarDateTime) {
-                    provider.selectDate(calendarDateTime);
-                    onSelectDate?.call(calendarDateTime);
-                  },
-                  calendarDayModel: calendarDayModel,
-                  calendarDates: provider.calendarDates,
-                ),
-              ),
-            ],
-          ),
+        child: Builder(
+          builder: (context) {
+            switch (calendarMode) {
+              case CalendarMode.monthlyLinear:
+                return const Center(
+                  child: Text("Coming Soon"),
+                );
+              default:
+                return ChangeNotifierProvider(
+                  create: (context) => CalendarProvider(),
+                  builder: (context, child) => CalendarMonthlyWidget(
+                    calendarType: calendarType,
+                    selectedDate: selectedDate,
+                  ),
+                );
+            }
+          },
         ),
       ),
     );
