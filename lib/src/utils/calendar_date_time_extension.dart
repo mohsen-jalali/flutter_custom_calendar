@@ -24,12 +24,20 @@ extension CalendarDateTimeExtension on CalendarDateTime {
     return CalendarDateTime(year, month - 1, 1, calendarType: calendarType);
   }
 
+  CalendarDateTime changeCalendarType(CalendarType calendarType){
+    if(calendarType == CalendarType.jalali){
+      return CalendarDateTime.fromJalali(toDateTime.toJalali());
+    }
+    return CalendarDateTime.fromDateTime(toJalali.toDateTime());
+  }
+
   bool get isBeforeNow{
     if(calendarType == CalendarType.jalali){
       return CalendarDateTime.fromJalali(Jalali.now()).isAfter(this) == 1;
     }
     return CalendarDateTime.fromDateTime(DateTime.now()).isAfter(this)  == 1;
   }
+
 
   Jalali get toJalali{
     return Jalali(year,month,day);
