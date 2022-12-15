@@ -30,6 +30,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  CalendarType calendarType = CalendarType.gregorian;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -38,33 +40,34 @@ class _MyHomePageState extends State<MyHomePage> {
       ),
       body: Center(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 16.0,vertical: 16),
+          padding: const EdgeInsets.symmetric(horizontal: 16.0, vertical: 16),
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
-            children:  [
+            children: [
               CustomCalendar(
-                calendarType: CalendarType.jalali,
+                calendarType: calendarType,
+                selectedDate: CalendarDateTime.fromDateTime(DateTime.now().add(Duration(days: 60))),
                 headerModel: const HeaderModel(
-                  padding: EdgeInsets.symmetric(horizontal: 8,vertical: 10)
-                ),
-                calendarDayModel:  CalendarDayModel(
-                  backgroundColor: Colors.green,
-                  showOverFlowDays: false,
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
+                calendarDayModel: CalendarDayModel(
+                  showOverFlowDays: true,
                   disablePastDays: true,
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                  ),
-                  selectedDecoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: Colors.green,
-                  ),
                   disableStyle: TextStyle(
-                    fontSize: 16,
-                    color: Colors.black.withOpacity(0.4)
-                  ),
-                  disableDayBackgroundColor: Colors.transparent
+                      fontSize: 16, color: Colors.black.withOpacity(0.4)),
+                  disableDayBackgroundColor: Colors.transparent,
                 ),
               ),
+              TextButton(
+                onPressed: () {
+                  if (calendarType == CalendarType.gregorian) {
+                    calendarType = CalendarType.jalali;
+                  } else {
+                    calendarType = CalendarType.gregorian;
+                  }
+                  setState(() {});
+                },
+                child: Text("${calendarType.name.toString()}"),
+              )
             ],
           ),
         ),
