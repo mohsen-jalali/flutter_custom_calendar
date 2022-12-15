@@ -57,7 +57,7 @@ class CalendarDayWidget extends StatelessWidget {
     if (isSelected) {
       return calendarDateModel?.selectedBackgroundColor ?? Colors.green;
     }
-    return calendarDateModel?.selectedBackgroundColor ?? Colors.blue;
+    return calendarDateModel?.backgroundColor ?? Colors.blue;
   }
 
   Decoration? get decoration {
