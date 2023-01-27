@@ -36,7 +36,7 @@ class CalendarDateTime {
 
   @override
   String toString() {
-    return "$year-$month-$day";
+    return "$year-${month.toString().padLeft(2,"0")}-${day.toString().padLeft(2,"0")}";
   }
 
   @override
@@ -46,5 +46,6 @@ class CalendarDateTime {
     }
     return super == other;
   }
+
 
 }
