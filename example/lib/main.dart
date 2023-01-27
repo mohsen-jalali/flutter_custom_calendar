@@ -31,6 +31,8 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   CalendarType calendarType = CalendarType.gregorian;
+  CalendarDateTime selectedDate = CalendarDateTime.fromDateTime(DateTime.now().add(Duration(days: 1)));
+  Color color = Colors.green;
 
   @override
   Widget build(BuildContext context) {
@@ -46,12 +48,25 @@ class _MyHomePageState extends State<MyHomePage> {
             children: [
               CustomCalendar(
                 calendarType: calendarType,
-                selectedDate: CalendarDateTime.fromDateTime(DateTime.now().add(Duration(days: 60))),
+                selectedDate: selectedDate,
+                onSelectDate: (selectedDate) {
+                  this.selectedDate = selectedDate;
+                  if(color == Colors.green){
+                    color = Colors.red;
+                  }
+                  else{
+                    color = Colors.green;
+                  }
+                  setState(() {
+
+                  });
+                },
                 headerModel: const HeaderModel(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
                 calendarDayModel: CalendarDayModel(
                   showOverFlowDays: true,
                   disablePastDays: true,
+                  selectedBackgroundColor: color,
                   disableStyle: TextStyle(
                       fontSize: 16, color: Colors.black.withOpacity(0.4)),
                   disableDayBackgroundColor: Colors.transparent,
