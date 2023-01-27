@@ -3,12 +3,10 @@ import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
 import 'package:flutter_custom_calendar/src/model/custom_day_model.dart';
 import 'package:flutter_custom_calendar/src/model/custom_header_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_header.dart';
 import 'package:flutter_custom_calendar/src/widgets/calendar_monthly_widget.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_week_day_row.dart';
-import 'package:provider/provider.dart';
+import 'package:scoped_model/scoped_model.dart';
 
-class CustomCalendar extends StatelessWidget {
+class CustomCalendar extends StatefulWidget {
   final CalendarType calendarType;
   final CalendarDateTime? selectedDate;
   final Function(CalendarDateTime)? onSelectDate;
@@ -33,40 +31,83 @@ class CustomCalendar extends StatelessWidget {
   }) : super(key: key);
 
   @override
+  State<CustomCalendar> createState() => _CustomCalendarState();
+}
+
+class _CustomCalendarState extends State<CustomCalendar> {
+  late GlobalKey<CalendarMonthlyWidgetState> monthlyStateKey;
+  late CalendarProvider calendarProvider;
+
+  @override
+  void initState() {
+    super.initState();
+    monthlyStateKey = GlobalKey<CalendarMonthlyWidgetState>();
+    initialCalendarProvider();
+  }
+
+  @override
+  void didUpdateWidget(covariant CustomCalendar oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(oldWidget.calendarType != widget.calendarType){
+      initialCalendarProvider();
+      updateWidgets();
+    }
+  }
+
+  void initialCalendarProvider(){
+    calendarProvider = CalendarProvider.createInstance(
+      calendarType: widget.calendarType,
+      selectedDate: widget.selectedDate,
+    );
+  }
+
+  void updateWidgets(){
+    switch(widget.calendarType){
+      default:
+        monthlyStateKey.currentState?.initialization();
+        break;
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Material(
-      color: Colors.transparent,
-      child: Container(
-        padding: padding,
-        clipBehavior: Clip.antiAlias,
-        decoration: calendarDecoration ??
-            BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 0,
-                    blurRadius: 10,
-                  )
-                ]),
-        child: Builder(
-          builder: (context) {
-            switch (calendarMode) {
-              case CalendarMode.monthlyLinear:
-                return const Center(
-                  child: Text("Coming Soon"),
-                );
-              default:
-                return ChangeNotifierProvider(
-                  create: (context) => CalendarProvider(),
-                  builder: (context, child) => CalendarMonthlyWidget(
-                    calendarType: calendarType,
-                    selectedDate: selectedDate,
-                  ),
-                );
-            }
-          },
+    return ScopedModel<CalendarProvider>(
+      model: calendarProvider,
+      child: Material(
+        color: Colors.transparent,
+        child: Container(
+          padding: widget.padding,
+          clipBehavior: Clip.antiAlias,
+          decoration: widget.calendarDecoration ??
+              BoxDecoration(
+                  color: Colors.white,
+                  borderRadius: BorderRadius.circular(10),
+                  boxShadow: [
+                    BoxShadow(
+                      color: Colors.black.withOpacity(0.1),
+                      spreadRadius: 0,
+                      blurRadius: 10,
+                    )
+                  ]),
+          child: Builder(
+            builder: (context) {
+              switch (widget.calendarMode) {
+                case CalendarMode.monthlyLinear:
+                  return const Center(
+                    child: Text("Coming Soon"),
+                  );
+                default:
+                  return CalendarMonthlyWidget(
+                    key: monthlyStateKey,
+                    calendarType: widget.calendarType,
+                    selectedDate: widget.selectedDate,
+                    headerModel: widget.headerModel,
+                    calendarDayModel: widget.calendarDayModel,
+                    onSelectDate: widget.onSelectDate,
+                  );
+              }
+            },
+          ),
         ),
       ),
     );
