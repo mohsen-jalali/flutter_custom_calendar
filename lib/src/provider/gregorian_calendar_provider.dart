@@ -40,10 +40,10 @@ class GregorianCalendarProvider extends CalendarProvider {
   @override
   void nextWeek() {
     DateTime dateTime = calendarDateTime.toDateTime;
-    if(dateTime.month != dateTime.add( Duration(days: 8-dateTime.weekday)).month){
+    if (dateTime.month !=
+        dateTime.add(Duration(days: 8 - dateTime.weekday)).month) {
       nextMonth();
-    }
-    else{
+    } else {
       dateTime = dateTime.add(Duration(days: 8 - dateTime.weekday));
       calendarDateTime = CalendarDateTime.fromDateTime(dateTime);
     }
@@ -52,16 +52,15 @@ class GregorianCalendarProvider extends CalendarProvider {
   @override
   void previousWeek() {
     DateTime dateTime = calendarDateTime.toDateTime;
-    if(dateTime.month != dateTime.subtract(Duration(days: dateTime.weekday - 1)).month){
+    if (dateTime.month !=
+        dateTime.subtract(Duration(days: dateTime.weekday - 1)).month) {
       dateTime = dateTime.subtract(Duration(days: dateTime.weekday - 1));
       calendarDateTime = CalendarDateTime.fromDateTime(dateTime);
-    }
-    else{
+    } else {
       dateTime = dateTime.subtract(Duration(days: dateTime.weekday));
       calendarDateTime = CalendarDateTime.fromDateTime(dateTime);
     }
   }
-
 
   @override
   List<CalendarDateTime> getMonthlyDatesList() {
@@ -75,7 +74,9 @@ class GregorianCalendarProvider extends CalendarProvider {
         break;
       }
       calendarDates.add(CalendarDateTime.fromDateTime(dateTime));
-      dateTime = dateTime.add(const Duration(days: 1));
+
+      ///because of time difference, add method will not work properly in september
+      dateTime = DateTime(dateTime.year, dateTime.month, dateTime.day + 1);
       if (calendarDateTime.month != dateTime.month && dateTime.weekday == 1) {
         break;
       }
@@ -94,6 +95,4 @@ class GregorianCalendarProvider extends CalendarProvider {
     }
     return calendarDates;
   }
-
-
 }
