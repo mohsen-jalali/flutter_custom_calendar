@@ -101,6 +101,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                 default:
                   return CalendarTableWidget(
                     key: monthlyStateKey,
+                    calendarMode: provider.calendarMode,
                     calendarType: widget.calendarType,
                     selectedDate: widget.selectedDate,
                     headerModel: widget.headerModel,
