@@ -67,7 +67,7 @@ abstract class CalendarProvider extends Model {
   }
 
   void previousMonth(){
-    if (calendarDateTime.month == 12) {
+    if (calendarDateTime.month == 1) {
       calendarDateTime = calendarDateTime.decreaseYear;
     } else {
       calendarDateTime = CalendarDateTime(
