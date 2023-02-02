@@ -8,10 +8,12 @@ import 'package:scoped_model/scoped_model.dart';
 abstract class CalendarProvider extends Model {
   CalendarType calendarType;
   CalendarDateTime selectedDate;
+  CalendarMode calendarMode;
 
   CalendarProvider({
     required this.calendarType,
     required this.selectedDate,
+    required this.calendarMode,
   }) {
     initCalendarDateTime();
   }
@@ -20,31 +22,66 @@ abstract class CalendarProvider extends Model {
 
   factory CalendarProvider.createInstance({
     required CalendarType calendarType,
+    required CalendarMode calendarMode,
     required CalendarDateTime? selectedDate,
   }) {
     if (calendarType == CalendarType.gregorian) {
       return GregorianCalendarProvider(
         selectedDate: selectedDate,
+        calendarMode: calendarMode,
       );
     }
-    return JalaliCalendarProvider(selectedDate: selectedDate);
+    return JalaliCalendarProvider(
+      selectedDate: selectedDate,
+      calendarMode: calendarMode,
+    );
   }
 
   void initCalendarDateTime();
 
-  List<CalendarDateTime> getMonthDateLit();
+  List<CalendarDateTime> getDateList() {
+    if (calendarMode == CalendarMode.weekly) {
+      return getWeeklyDatesList();
+    }
+    return getMonthlyDatesList();
+  }
+
+  List<CalendarDateTime> getMonthlyDatesList();
+
+  List<CalendarDateTime> getWeeklyDatesList();
 
   void selectCurrentDate();
 
-  void increaseMonth() {
-    calendarDateTime = calendarDateTime.increaseMonth;
+  void nextWeek();
+
+  void previousWeek();
+
+  void nextMonth() {
+    if (calendarDateTime.month == 12) {
+      calendarDateTime = calendarDateTime.increaseYear;
+    } else {
+      calendarDateTime = CalendarDateTime(
+          calendarDateTime.year, calendarDateTime.month + 1, 1,
+          calendarType: calendarType);
+    }
   }
 
-  void decreaseMonth() {
-    calendarDateTime = calendarDateTime.decreaseMonth;
+  void previousMonth(){
+    if (calendarDateTime.month == 12) {
+      calendarDateTime = calendarDateTime.decreaseYear;
+    } else {
+      calendarDateTime = CalendarDateTime(
+          calendarDateTime.year, calendarDateTime.month - 1, 1,
+          calendarType: calendarType);
+    }
   }
 
   void selectCalendarDate(CalendarDateTime selectedDate) {
     this.selectedDate = selectedDate;
+  }
+
+  void changeCalendarMode(CalendarMode calendarMode) {
+    this.calendarMode = calendarMode;
+    notifyListeners();
   }
 }
