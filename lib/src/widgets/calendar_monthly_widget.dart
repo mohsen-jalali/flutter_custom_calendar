@@ -49,8 +49,16 @@ class CalendarMonthlyWidgetState extends State<CalendarMonthlyWidget> {
       children: [
         CalendarHeader(
           calendarDateTime: provider.calendarDateTime,
-          onPressNext: () => nextPage(),
-          onPressPrevious: () => previousPage(),
+          onPressNext: () {
+            pageController.nextPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut);
+          },
+          onPressPrevious: () {
+            pageController.previousPage(
+                duration: const Duration(milliseconds: 300),
+                curve: Curves.easeInOut);
+          },
           onPressCurrentDate: () => selectCurrentDate(),
           headerModel: widget.headerModel,
         ),
@@ -59,44 +67,39 @@ class CalendarMonthlyWidgetState extends State<CalendarMonthlyWidget> {
         ),
         AnimatedContainer(
           height: calendarHeight,
-          width: MediaQuery
-              .of(context)
-              .size
-              .width,
+          width: MediaQuery.of(context).size.width,
           duration: const Duration(milliseconds: 300),
           child: PageView.builder(
             controller: pageController,
             onPageChanged: (pageIndex) => onPageChanged(pageIndex),
-            itemBuilder: (context, index) =>
-                GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 7,
-                    mainAxisExtent: 50,
-                  ),
-                  physics: const NeverScrollableScrollPhysics(),
-                  itemCount: calendarDates.length,
-                  itemBuilder: (context, index) {
-                    return AnimationConfiguration.staggeredGrid(
-                      columnCount: 7,
-                      position: index,
-                      duration: const Duration(milliseconds: 400),
-                      child: ScaleAnimation(
-                        child: FadeInAnimation(
-                          child: CalendarDayWidget(
-                            calendarDateTime: calendarDates[index],
-                            calendarDateModel: widget.calendarDayModel,
-                            isSelected:
+            itemBuilder: (context, index) => GridView.builder(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 7,
+                mainAxisExtent: 50,
+              ),
+              physics: const NeverScrollableScrollPhysics(),
+              itemCount: calendarDates.length,
+              itemBuilder: (context, index) {
+                return AnimationConfiguration.staggeredGrid(
+                  columnCount: 7,
+                  position: index,
+                  duration: const Duration(milliseconds: 400),
+                  child: ScaleAnimation(
+                    child: FadeInAnimation(
+                      child: CalendarDayWidget(
+                        calendarDateTime: calendarDates[index],
+                        calendarDateModel: widget.calendarDayModel,
+                        isSelected:
                             provider.selectedDate == calendarDates[index],
-                            isOverFlow: provider.calendarDateTime.month !=
-                                calendarDates[index].month,
-                            onSelectDate: () =>
-                                selectDate(calendarDates[index]),
-                          ),
-                        ),
+                        isOverFlow: provider.calendarDateTime.month !=
+                            calendarDates[index].month,
+                        onSelectDate: () => selectDate(calendarDates[index]),
                       ),
-                    );
-                  },
-                ),
+                    ),
+                  ),
+                );
+              },
+            ),
           ),
         )
       ],
@@ -121,59 +124,57 @@ class CalendarMonthlyWidgetState extends State<CalendarMonthlyWidget> {
     });
   }
 
-  void nextPage() {
-    pageController.nextPage(
-        duration: const Duration(
-          milliseconds: 300,
-        ),
-        curve: Curves.easeInOut);
-  }
-
-  void previousPage() {
-    pageController.previousPage(
-        duration: const Duration(
-          milliseconds: 300,
-        ),
-        curve: Curves.easeInOut);
-  }
-
   void onPageChanged(int pageIndex) {
     if (currentPage < pageIndex) {
-      nextMonth();
-    }
-    else {
-      previousMonth();
+      nextPage();
+    } else {
+      previousPage();
     }
     currentPage = pageIndex;
   }
 
   void getCalendarDates() {
-    calendarDates = provider.getMonthDateLit();
+    calendarDates = provider.getDateList();
     setState(() {});
   }
 
-  void nextMonth() {
-    provider.increaseMonth();
+  void nextPage() {
+    if(provider.calendarMode == CalendarMode.weekly){
+      provider.nextWeek();
+    }
+    else{
+      provider.nextMonth();
+    }
     getCalendarDates();
   }
 
-  void previousMonth() {
-    provider.decreaseMonth();
+  void previousPage() {
+    if(provider.calendarMode == CalendarMode.weekly){
+      provider.previousWeek();
+    }
+    else{
+      provider.previousMonth();
+    }
     getCalendarDates();
   }
 
   void selectCurrentDate() {
     provider.selectCurrentDate();
     getCalendarDates();
+    widget.onSelectDate?.call(provider.selectedDate);
   }
 
   void selectDate(CalendarDateTime selectedDate) {
     provider.selectCalendarDate(selectedDate);
     if (selectedDate.month != provider.calendarDateTime.month) {
       if (selectedDate.isAfter(provider.calendarDateTime) == 1) {
-        nextMonth();
+        pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
       } else {
-        previousMonth();
+        pageController.previousPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
       }
     }
     widget.onSelectDate?.call(selectedDate);
