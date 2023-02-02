@@ -3,7 +3,7 @@ import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
 import 'package:flutter_custom_calendar/src/model/custom_day_model.dart';
 import 'package:flutter_custom_calendar/src/model/custom_header_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_monthly_widget.dart';
+import 'package:flutter_custom_calendar/src/widgets/calendar_table_widget.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class CustomCalendar extends StatefulWidget {
@@ -35,13 +35,13 @@ class CustomCalendar extends StatefulWidget {
 }
 
 class _CustomCalendarState extends State<CustomCalendar> {
-  late GlobalKey<CalendarMonthlyWidgetState> monthlyStateKey;
+  late GlobalKey<CalendarTableWidgetState> monthlyStateKey;
   late CalendarProvider calendarProvider;
 
   @override
   void initState() {
     super.initState();
-    monthlyStateKey = GlobalKey<CalendarMonthlyWidgetState>();
+    monthlyStateKey = GlobalKey<CalendarTableWidgetState>();
     initialCalendarProvider();
   }
 
@@ -99,7 +99,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     child: Text("Coming Soon"),
                   );
                 default:
-                  return CalendarMonthlyWidget(
+                  return CalendarTableWidget(
                     key: monthlyStateKey,
                     calendarType: widget.calendarType,
                     selectedDate: widget.selectedDate,

@@ -9,14 +9,14 @@ import 'package:flutter_custom_calendar/src/widgets/calendar_week_day_row.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:scoped_model/scoped_model.dart';
 
-class CalendarMonthlyWidget extends StatefulWidget {
+class CalendarTableWidget extends StatefulWidget {
   final CalendarType calendarType;
   final CalendarDateTime? selectedDate;
   final Function(CalendarDateTime)? onSelectDate;
   final CalendarDayModel? calendarDayModel;
   final HeaderModel? headerModel;
 
-  const CalendarMonthlyWidget({
+  const CalendarTableWidget({
     Key? key,
     required this.calendarType,
     this.selectedDate,
@@ -26,10 +26,10 @@ class CalendarMonthlyWidget extends StatefulWidget {
   }) : super(key: key);
 
   @override
-  State<CalendarMonthlyWidget> createState() => CalendarMonthlyWidgetState();
+  State<CalendarTableWidget> createState() => CalendarTableWidgetState();
 }
 
-class CalendarMonthlyWidgetState extends State<CalendarMonthlyWidget> {
+class CalendarTableWidgetState extends State<CalendarTableWidget> {
   PageController pageController = PageController(initialPage: 1000000);
   int currentPage = 1000000;
   List<CalendarDateTime> calendarDates = [];
