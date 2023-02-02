@@ -15,10 +15,12 @@ class CalendarTableWidget extends StatefulWidget {
   final Function(CalendarDateTime)? onSelectDate;
   final CalendarDayModel? calendarDayModel;
   final HeaderModel? headerModel;
+  final CalendarMode calendarMode;
 
   const CalendarTableWidget({
     Key? key,
     required this.calendarType,
+    required this.calendarMode,
     this.selectedDate,
     this.onSelectDate,
     this.calendarDayModel,
@@ -43,6 +45,14 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
     return (50 * calendarDates.length ~/ 7).toDouble();
   }
 
+
+  @override
+  void didUpdateWidget(covariant CalendarTableWidget oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if(provider.calendarMode != oldWidget.calendarMode){
+      initialization();
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -65,40 +75,43 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
         RowCalendarWeekDayTitle(
           calendarType: provider.calendarType,
         ),
-        AnimatedContainer(
-          height: calendarHeight,
-          width: MediaQuery.of(context).size.width,
-          duration: const Duration(milliseconds: 300),
-          child: PageView.builder(
-            controller: pageController,
-            onPageChanged: (pageIndex) => onPageChanged(pageIndex),
-            itemBuilder: (context, index) => GridView.builder(
-              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                crossAxisCount: 7,
-                mainAxisExtent: 50,
-              ),
-              physics: const NeverScrollableScrollPhysics(),
-              itemCount: calendarDates.length,
-              itemBuilder: (context, index) {
-                return AnimationConfiguration.staggeredGrid(
-                  columnCount: 7,
-                  position: index,
-                  duration: const Duration(milliseconds: 400),
-                  child: ScaleAnimation(
-                    child: FadeInAnimation(
-                      child: CalendarDayWidget(
-                        calendarDateTime: calendarDates[index],
-                        calendarDateModel: widget.calendarDayModel,
-                        isSelected:
-                            provider.selectedDate == calendarDates[index],
-                        isOverFlow: provider.calendarDateTime.month !=
-                            calendarDates[index].month,
-                        onSelectDate: () => selectDate(calendarDates[index]),
+        GestureDetector(
+          onPanUpdate: onChangedCalendarMode,
+          child: AnimatedContainer(
+            height: calendarHeight,
+            width: MediaQuery.of(context).size.width,
+            duration: const Duration(milliseconds: 300),
+            child: PageView.builder(
+              controller: pageController,
+              onPageChanged: (pageIndex) => onPageChanged(pageIndex),
+              itemBuilder: (context, index) => GridView.builder(
+                gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                  crossAxisCount: 7,
+                  mainAxisExtent: 50,
+                ),
+                physics: const NeverScrollableScrollPhysics(),
+                itemCount: calendarDates.length,
+                itemBuilder: (context, index) {
+                  return AnimationConfiguration.staggeredGrid(
+                    columnCount: 7,
+                    position: index,
+                    duration: const Duration(milliseconds: 400),
+                    child: ScaleAnimation(
+                      child: FadeInAnimation(
+                        child: CalendarDayWidget(
+                          calendarDateTime: calendarDates[index],
+                          calendarDateModel: widget.calendarDayModel,
+                          isSelected:
+                              provider.selectedDate == calendarDates[index],
+                          isOverFlow: provider.calendarDateTime.month !=
+                              calendarDates[index].month,
+                          onSelectDate: () => selectDate(calendarDates[index]),
+                        ),
                       ),
                     ),
-                  ),
-                );
-              },
+                  );
+                },
+              ),
             ),
           ),
         )
@@ -122,15 +135,6 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
     postFrameCallback(() {
       getCalendarDates();
     });
-  }
-
-  void onPageChanged(int pageIndex) {
-    if (currentPage < pageIndex) {
-      nextPage();
-    } else {
-      previousPage();
-    }
-    currentPage = pageIndex;
   }
 
   void getCalendarDates() {
@@ -158,6 +162,15 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
     getCalendarDates();
   }
 
+  void onPageChanged(int pageIndex) {
+    if (currentPage < pageIndex) {
+      nextPage();
+    } else {
+      previousPage();
+    }
+    currentPage = pageIndex;
+  }
+
   void selectCurrentDate() {
     provider.selectCurrentDate();
     getCalendarDates();
@@ -179,5 +192,15 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
     }
     widget.onSelectDate?.call(selectedDate);
     setState(() {});
+  }
+
+  void onChangedCalendarMode(DragUpdateDetails details) {
+    ///Swiping up to change calendar mode to weekly
+    if(details.delta.dy < -10){
+      provider.changeCalendarMode(CalendarMode.weekly);
+    }
+    else if(details.delta.dy > 10){
+      provider.changeCalendarMode(CalendarMode.monthlyTable);
+    }
   }
 }
