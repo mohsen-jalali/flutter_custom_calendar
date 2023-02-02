@@ -10,20 +10,6 @@ extension CalendarDateTimeExtension on CalendarDateTime {
     return CalendarDateTime(year - 1, 12, 1, calendarType: calendarType);
   }
 
-  CalendarDateTime get increaseMonth {
-    if (month == 12) {
-      return increaseYear;
-    }
-    return CalendarDateTime(year, month + 1, 1, calendarType: calendarType);
-  }
-
-  CalendarDateTime get decreaseMonth {
-    if (month == 1) {
-      return decreaseYear;
-    }
-    return CalendarDateTime(year, month - 1, 1, calendarType: calendarType);
-  }
-
   CalendarDateTime changeCalendarType(CalendarType calendarType){
     if(calendarType == CalendarType.jalali){
       return CalendarDateTime.fromJalali(toDateTime.toJalali());
