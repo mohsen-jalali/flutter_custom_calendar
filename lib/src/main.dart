@@ -48,21 +48,22 @@ class _CustomCalendarState extends State<CustomCalendar> {
   @override
   void didUpdateWidget(covariant CustomCalendar oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(oldWidget.calendarType != widget.calendarType){
+    if (oldWidget.calendarType != widget.calendarType) {
       initialCalendarProvider();
       updateWidgets();
     }
   }
 
-  void initialCalendarProvider(){
+  void initialCalendarProvider() {
     calendarProvider = CalendarProvider.createInstance(
       calendarType: widget.calendarType,
       selectedDate: widget.selectedDate,
+      calendarMode: widget.calendarMode,
     );
   }
 
-  void updateWidgets(){
-    switch(widget.calendarType){
+  void updateWidgets() {
+    switch (widget.calendarType) {
       default:
         monthlyStateKey.currentState?.initialization();
         break;
@@ -80,18 +81,19 @@ class _CustomCalendarState extends State<CustomCalendar> {
           clipBehavior: Clip.antiAlias,
           decoration: widget.calendarDecoration ??
               BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(10),
-                  boxShadow: [
-                    BoxShadow(
-                      color: Colors.black.withOpacity(0.1),
-                      spreadRadius: 0,
-                      blurRadius: 10,
-                    )
-                  ]),
-          child: Builder(
-            builder: (context) {
-              switch (widget.calendarMode) {
+                color: Colors.white,
+                borderRadius: BorderRadius.circular(10),
+                boxShadow: [
+                  BoxShadow(
+                    color: Colors.black.withOpacity(0.1),
+                    spreadRadius: 0,
+                    blurRadius: 10,
+                  )
+                ],
+              ),
+          child: ScopedModelDescendant<CalendarProvider>(
+            builder: (context, child, provider) {
+              switch (provider.calendarMode) {
                 case CalendarMode.monthlyLinear:
                   return const Center(
                     child: Text("Coming Soon"),
