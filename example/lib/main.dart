@@ -49,6 +49,7 @@ class _MyHomePageState extends State<MyHomePage> {
               CustomCalendar(
                 calendarType: calendarType,
                 selectedDate: selectedDate,
+                calendarMode: CalendarMode.weekly,
                 onSelectDate: (selectedDate) {
                   this.selectedDate = selectedDate;
                   if(color == Colors.green){
@@ -64,8 +65,8 @@ class _MyHomePageState extends State<MyHomePage> {
                 headerModel: const HeaderModel(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
                 calendarDayModel: CalendarDayModel(
-                  showOverFlowDays: true,
-                  disablePastDays: true,
+                  showOverFlowDays: false,
+                  disablePastDays: false,
                   selectedBackgroundColor: color,
                   disableStyle: TextStyle(
                       fontSize: 16, color: Colors.black.withOpacity(0.4)),
