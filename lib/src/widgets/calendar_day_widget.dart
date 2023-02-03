@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
 import 'package:flutter_custom_calendar/src/model/custom_day_model.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
+import 'package:flutter_custom_calendar/src/utils/date_utils.dart';
 
 class CalendarDayWidget extends StatelessWidget {
   final CalendarDateTime calendarDateTime;
@@ -9,6 +10,8 @@ class CalendarDayWidget extends StatelessWidget {
   final VoidCallback onSelectDate;
   final bool isSelected;
   final bool isOverFlow;
+  final bool showOverFlowDays;
+  final bool showWeekdayTitle;
 
   const CalendarDayWidget({
     Key? key,
@@ -16,32 +19,50 @@ class CalendarDayWidget extends StatelessWidget {
     required this.onSelectDate,
     required this.isSelected,
     required this.isOverFlow,
+    this.showOverFlowDays = false,
+    this.showWeekdayTitle = false,
     this.calendarDateModel,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    if (calendarDateModel?.showOverFlowDays == false && isOverFlow) {
+    if (showOverFlowDays == false && isOverFlow) {
       return const SizedBox.shrink();
     }
-    return AnimatedContainer(
-      duration: const Duration(milliseconds: 300),
-      margin: calendarDateModel?.padding,
-      decoration: decoration ??
-          BoxDecoration(
-            color: backgroundColor,
-            shape: BoxShape.rectangle,
-          ),
-      child: InkWell(
-        onTap: isDisable ? null : onSelectDate,
-        child: Center(
-          child: Text(
-            calendarDateTime.day.toString(),
-            style:
-                textStyle ?? const TextStyle(fontSize: 16, color: Colors.black),
+    return Column(
+      children: [
+        Visibility(
+          visible: showWeekdayTitle,
+          child: Center(
+            child: Text(
+              CalendarUtils.getDateWeekdayTitle(calendarDateTime, context),
+            ),
           ),
         ),
-      ),
+        Expanded(
+          child: AnimatedContainer(
+            height: calendarDateModel?.height,
+            width: calendarDateModel?.width,
+            duration: const Duration(milliseconds: 300),
+            margin: calendarDateModel?.padding,
+            decoration: decoration ??
+                BoxDecoration(
+                  color: backgroundColor,
+                  shape: BoxShape.rectangle,
+                ),
+            child: InkWell(
+              onTap: isDisable ? null : onSelectDate,
+              child: Center(
+                child: Text(
+                  calendarDateTime.day.toString(),
+                  style:
+                      textStyle ?? const TextStyle(fontSize: 16, color: Colors.black),
+                ),
+              ),
+            ),
+          ),
+        ),
+      ],
     );
   }
 
