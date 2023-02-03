@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class CalendarDayModel {
-  final double? height;
-  final double? width;
+  final double height;
+  final double width;
   final Color? backgroundColor;
   final Color? selectedBackgroundColor;
   final Color? disableDayBackgroundColor;
@@ -13,12 +13,11 @@ class CalendarDayModel {
   final Decoration? selectedDecoration;
   final Decoration? disableDecoration;
   final EdgeInsets? padding;
-  final bool showOverFlowDays;
   final bool disablePastDays;
 
   const CalendarDayModel({
-    this.height,
-    this.width,
+    this.height = 60,
+    this.width = 60,
     this.backgroundColor,
     this.decoration,
     this.padding,
@@ -29,7 +28,6 @@ class CalendarDayModel {
     this.selectedBackgroundColor,
     this.selectedDecoration,
     this.disableDecoration,
-    this.showOverFlowDays = false,
     this.disablePastDays = false,
   });
 }
