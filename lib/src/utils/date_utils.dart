@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
+import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
 
 class CalendarUtils {
   static List<String> weekDaysTitle(CalendarType calendarType) {
@@ -11,22 +12,22 @@ class CalendarUtils {
     }
   }
 
-  static String getMonthNameByIndex(
-      int index, CalendarType calendarType, BuildContext context) {
-    switch (calendarType) {
+  static String getMonthName(
+      CalendarDateTime calendarDateTime, BuildContext context) {
+    switch (calendarDateTime.calendarType) {
       case CalendarType.jalali:
         switch (Localizations.localeOf(context).languageCode) {
           case "fa":
-            return persianJalaliMonthTitles[index - 1];
+            return persianJalaliMonthTitles[calendarDateTime.toJalali.month - 1];
           default:
-            return englishJalaliMonthTitles[index - 1];
+            return englishJalaliMonthTitles[calendarDateTime.toJalali.month - 1];
         }
       case CalendarType.gregorian:
         switch (Localizations.localeOf(context).languageCode) {
           case "fa":
-            return persianGregorianMonthTitles[index - 1];
+            return persianGregorianMonthTitles[calendarDateTime.toDateTime.month - 1];
           default:
-            return englishGregorianMonthTitles[index - 1];
+            return englishGregorianMonthTitles[calendarDateTime.toDateTime.month - 1];
         }
     }
   }
@@ -48,6 +49,15 @@ class CalendarUtils {
           default:
             return englishGregorianMonthTitles;
         }
+    }
+  }
+
+  static String getDateWeekdayTitle(CalendarDateTime calendarDateTime,BuildContext context){
+    switch (calendarDateTime.calendarType) {
+      case CalendarType.jalali:
+        return jalaliWeekDays[calendarDateTime.toJalali.weekDay - 1];
+      case CalendarType.gregorian:
+        return gregorianWeekDays[calendarDateTime.toDateTime.weekday - 1];
     }
   }
 

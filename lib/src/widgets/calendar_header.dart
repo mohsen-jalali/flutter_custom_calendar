@@ -36,7 +36,7 @@ class CalendarHeader extends StatelessWidget {
               children: [
                 Expanded(
                   child: Text(
-                    "${CalendarUtils.getMonthNameByIndex(calendarDateTime.month, calendarDateTime.calendarType, context)} ${calendarDateTime.year}",
+                    "${CalendarUtils.getMonthName(calendarDateTime, context)} ${calendarDateTime.year}",
                     style: headerModel?.titleStyle ??
                         const TextStyle(
                           fontSize: 18,
