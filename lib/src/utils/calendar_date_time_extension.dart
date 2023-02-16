@@ -18,6 +18,17 @@ extension CalendarDateTimeExtension on CalendarDateTime {
     return CalendarDateTime.fromDateTime(toJalali.toDateTime());
   }
 
+  bool get isToday {
+    DateTime dateTime = toDateTime;
+    DateTime now = DateTime.now();
+    if (dateTime.day == now.day &&
+        dateTime.month == now.month &&
+        dateTime.year == now.year) {
+      return true;
+    }
+    return false;
+  }
+
   bool get isBeforeNow {
     if (calendarType == CalendarType.jalali) {
       return CalendarDateTime.fromJalali(Jalali.now()).isAfter(this) == 1;
@@ -30,14 +41,14 @@ extension CalendarDateTimeExtension on CalendarDateTime {
   }
 
   Jalali get toJalali {
-    if(calendarType == CalendarType.gregorian){
+    if (calendarType == CalendarType.gregorian) {
       return toDateTime.toJalali();
     }
     return Jalali(year, month, day);
   }
 
   DateTime get toDateTime {
-    if(calendarType == CalendarType.jalali){
+    if (calendarType == CalendarType.jalali) {
       return toJalali.toDateTime();
     }
     return DateTime(year, month, day);
@@ -46,22 +57,17 @@ extension CalendarDateTimeExtension on CalendarDateTime {
   int isAfter(CalendarDateTime dateTime) {
     if (year > dateTime.year) {
       return 1;
-    }
-    else if (year < dateTime.year) {
+    } else if (year < dateTime.year) {
       return -1;
-    }
-    else {
+    } else {
       if (month > dateTime.month) {
         return 1;
-      }
-      else if (month < dateTime.month) {
+      } else if (month < dateTime.month) {
         return -1;
-      }
-      else {
+      } else {
         if (day > dateTime.day) {
           return 1;
-        }
-        else if (day < dateTime.day) {
+        } else if (day < dateTime.day) {
           return -1;
         }
         return 0;
