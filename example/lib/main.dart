@@ -51,6 +51,29 @@ class _MyHomePageState extends State<MyHomePage> {
             crossAxisAlignment: CrossAxisAlignment.start,
             mainAxisAlignment: MainAxisAlignment.start,
             children: [
+              CustomCalendarRangePicker(
+                calendarType: calendarType,
+                showOverFlowDays: showOverflowDays,
+                headerModel: const HeaderModel(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
+                calendarRangeDayModel: CalendarRangeDayModel(
+                  disablePastDays: disablePastDays,
+                  width: 64,
+                  height: 64,
+                  rangeDecoration: BoxDecoration(
+                    color: Colors.red.withOpacity(0.2)
+                  ),
+                  disableStyle: TextStyle(
+                      fontSize: 16, color: Colors.black.withOpacity(0.4)),
+                ),
+                selectedRange: PickedRange(
+                  startDate: CalendarDateTime.fromDateTime(DateTime.now()),
+                  endDate: CalendarDateTime.fromDateTime(DateTime.now()),
+                ),
+              ),
+              SizedBox(
+                height: 64,
+              ),
               CustomCalendar(
                 calendarType: calendarType,
                 selectedDate: selectedDate,
@@ -222,7 +245,7 @@ class _MyHomePageState extends State<MyHomePage> {
                     ),
                   ),
                 ],
-              )
+              ),
             ],
           ),
         ),
