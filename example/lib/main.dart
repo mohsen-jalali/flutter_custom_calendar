@@ -71,10 +71,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   disablePastDays: disablePastDays,
                   width: 64,
                   height: 64,
-                  selectedBackgroundColor: color,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.green,
+                  ),
                   disableStyle: TextStyle(
                       fontSize: 16, color: Colors.black.withOpacity(0.4)),
-                  disableDayBackgroundColor: Colors.transparent,
                 ),
               ),
               const SizedBox(
@@ -108,7 +114,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              SizedBox(height: 24,),
+              SizedBox(
+                height: 24,
+              ),
               Text(
                 "Calendar mode:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
@@ -141,7 +149,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   },
                 ),
               ),
-              SizedBox(height: 24,),
+              SizedBox(
+                height: 24,
+              ),
               Text(
                 "Show overflow days:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
@@ -176,7 +186,9 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               ),
-              SizedBox(height: 24,),
+              SizedBox(
+                height: 24,
+              ),
               Text(
                 "Disable past days:",
                 style: TextStyle(fontSize: 16, fontWeight: FontWeight.w700),
@@ -211,7 +223,6 @@ class _MyHomePageState extends State<MyHomePage> {
                   ),
                 ],
               )
-
             ],
           ),
         ),
