@@ -86,6 +86,7 @@ class CalendarRangeDayWidget extends StatelessWidget {
   }
 
   Color? get backgroundColor {
+    if(isOverFlow) return null;
     if (status == RangeDayStatus.startHead ||
         status == RangeDayStatus.endHead) {
       return calendarDateModel?.rangeDecoration != null
