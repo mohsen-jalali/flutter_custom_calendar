@@ -45,11 +45,7 @@ class CalendarDayWidget extends StatelessWidget {
             width: calendarDateModel?.width,
             duration: const Duration(milliseconds: 300),
             margin: calendarDateModel?.padding,
-            decoration: decoration ??
-                BoxDecoration(
-                  color: backgroundColor,
-                  shape: BoxShape.rectangle,
-                ),
+            decoration: decoration,
             child: InkWell(
               onTap: isDisable ? null : onSelectDate,
               child: Center(
@@ -69,16 +65,6 @@ class CalendarDayWidget extends StatelessWidget {
   bool get isDisable {
     return calendarDateTime.isBeforeNow &&
         (calendarDateModel?.disablePastDays ?? false);
-  }
-
-  Color get backgroundColor {
-    if (isDisable || isOverFlow) {
-      return calendarDateModel?.disableDayBackgroundColor ?? Colors.transparent;
-    }
-    if (isSelected) {
-      return calendarDateModel?.selectedBackgroundColor ?? Colors.green;
-    }
-    return calendarDateModel?.backgroundColor ?? Colors.blue;
   }
 
   Decoration? get decoration {
