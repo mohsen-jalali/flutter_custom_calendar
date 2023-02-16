@@ -4,8 +4,8 @@ import 'package:flutter_custom_calendar/src/model/custom_day_model.dart';
 import 'package:flutter_custom_calendar/src/model/custom_header_model.dart';
 import 'package:flutter_custom_calendar/src/model/selected_date_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_linear_widget.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_table_widget.dart';
+import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_linear_widget.dart';
+import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_table_widget.dart';
 import 'package:scoped_model/scoped_model.dart';
 
 class CustomCalendar extends StatefulWidget {
