@@ -65,7 +65,7 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
         singleDate: CalendarDateTime.fromDateTime(DateTime.now())
       ),
       calendarMode: CalendarMode.monthlyTable,
-      selectionMode: CalendarSelectionMode.single,
+      selectionMode: CalendarSelectionMode.range,
     );
   }
 
