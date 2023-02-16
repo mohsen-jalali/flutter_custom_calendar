@@ -6,7 +6,7 @@ import 'package:flutter_custom_calendar/src/utils/date_utils.dart';
 
 class CalendarDayWidget extends StatelessWidget {
   final CalendarDateTime calendarDateTime;
-  final CalendarDayModel? calendarDateModel;
+  final CalendarDayModel calendarDateModel;
   final VoidCallback onSelectDate;
   final bool isSelected;
   final bool isOverFlow;
@@ -19,9 +19,9 @@ class CalendarDayWidget extends StatelessWidget {
     required this.onSelectDate,
     required this.isSelected,
     required this.isOverFlow,
+    required this.calendarDateModel,
     this.showOverFlowDays = false,
     this.showWeekdayTitle = false,
-    this.calendarDateModel,
   }) : super(key: key);
 
   @override
@@ -41,20 +41,29 @@ class CalendarDayWidget extends StatelessWidget {
         ),
         Expanded(
           child: AnimatedContainer(
-            height: calendarDateModel?.height,
-            width: calendarDateModel?.width,
+            height: calendarDateModel.height,
+            width: calendarDateModel.width,
             duration: const Duration(milliseconds: 300),
-            margin: calendarDateModel?.padding,
+            margin: calendarDateModel.padding,
             decoration: decoration,
-            child: InkWell(
-              onTap: isDisable ? null : onSelectDate,
-              child: Center(
-                child: Text(
-                  calendarDateTime.day.toString(),
-                  style:
-                      textStyle ?? const TextStyle(fontSize: 16, color: Colors.black),
+            child: Stack(
+              alignment: calendarDateModel.tagAlignment,
+              children: [
+                InkWell(
+                  onTap: isDisable ? null : onSelectDate,
+                  child: Center(
+                    child: Text(
+                      calendarDateTime.day.toString(),
+                      style: textStyle ??
+                          const TextStyle(fontSize: 16, color: Colors.black),
+                    ),
+                  ),
                 ),
-              ),
+                if (calendarDateModel.tagBuilder != null &&
+                    isOverFlow == false &&
+                    isDisable == false)
+                  calendarDateModel.tagBuilder!(calendarDateTime)
+              ],
             ),
           ),
         ),
@@ -64,26 +73,26 @@ class CalendarDayWidget extends StatelessWidget {
 
   bool get isDisable {
     return calendarDateTime.isBeforeNow &&
-        (calendarDateModel?.disablePastDays ?? false);
+        (calendarDateModel.disablePastDays ?? false);
   }
 
   Decoration? get decoration {
     if (isDisable || isOverFlow) {
-      return calendarDateModel?.disableDecoration;
+      return calendarDateModel.disableDecoration;
     }
     if (isSelected) {
-      return calendarDateModel?.selectedDecoration;
+      return calendarDateModel.selectedDecoration;
     }
-    return calendarDateModel?.decoration;
+    return calendarDateModel.decoration;
   }
 
   TextStyle? get textStyle {
     if (isDisable || isOverFlow) {
-      return calendarDateModel?.disableStyle;
+      return calendarDateModel.disableStyle;
     }
     if (isSelected) {
-      return calendarDateModel?.selectedStyle;
+      return calendarDateModel.selectedStyle;
     }
-    return calendarDateModel?.style;
+    return calendarDateModel.style;
   }
 }

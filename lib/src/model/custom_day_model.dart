@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
 
 class CalendarDayModel {
   final double height;
@@ -11,6 +12,8 @@ class CalendarDayModel {
   final Decoration? disableDecoration;
   final EdgeInsets? padding;
   final bool disablePastDays;
+  final Widget Function(CalendarDateTime)? tagBuilder;
+  final Alignment tagAlignment;
 
   const CalendarDayModel({
     this.height = 60,
@@ -22,6 +25,8 @@ class CalendarDayModel {
     this.disableStyle,
     this.selectedDecoration,
     this.disableDecoration,
+    this.tagBuilder,
     this.disablePastDays = false,
+    this.tagAlignment = Alignment.bottomRight,
   });
 }

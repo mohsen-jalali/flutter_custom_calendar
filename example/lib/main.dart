@@ -94,6 +94,16 @@ class _MyHomePageState extends State<MyHomePage> {
                   disablePastDays: disablePastDays,
                   width: 64,
                   height: 64,
+                  padding: EdgeInsets.only(bottom: 10),
+                  tagBuilder: (p0) => Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child: Center(child: Text(p0.day.toString(),style: TextStyle(color: Colors.white),)),
+                  ),
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: Colors.blue,
