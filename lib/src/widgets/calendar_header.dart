@@ -6,7 +6,7 @@ class CalendarHeader extends StatelessWidget {
   final CalendarDateTime calendarDateTime;
   final VoidCallback onPressNext;
   final VoidCallback onPressPrevious;
-  final VoidCallback onPressCurrentDate;
+  final VoidCallback? onPressCurrentDate;
   final HeaderModel? headerModel;
 
   const CalendarHeader({
@@ -14,7 +14,7 @@ class CalendarHeader extends StatelessWidget {
     required this.calendarDateTime,
     required this.onPressNext,
     required this.onPressPrevious,
-    required this.onPressCurrentDate,
+    this.onPressCurrentDate,
     this.headerModel,
   }) : super(key: key);
 
@@ -43,11 +43,14 @@ class CalendarHeader extends StatelessWidget {
                         ),
                   ),
                 ),
-                IconButton(
-                  onPressed: onPressCurrentDate,
-                  icon: const Icon(
-                    Icons.today,
-                    color: Colors.black,
+                Visibility(
+                  visible: onPressCurrentDate != null,
+                  child: IconButton(
+                    onPressed: onPressCurrentDate,
+                    icon: const Icon(
+                      Icons.today,
+                      color: Colors.black,
+                    ),
                   ),
                 )
               ],
