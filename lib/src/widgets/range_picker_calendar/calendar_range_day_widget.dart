@@ -86,7 +86,7 @@ class CalendarRangeDayWidget extends StatelessWidget {
   }
 
   Color? get backgroundColor {
-    if(isOverFlow) return null;
+    if (isOverFlow) return null;
     if (status == RangeDayStatus.startHead ||
         status == RangeDayStatus.endHead) {
       return calendarDateModel?.rangeDecoration != null
@@ -109,6 +109,9 @@ class CalendarRangeDayWidget extends StatelessWidget {
       case RangeDayStatus.inRange:
         return calendarDateModel?.rangeDecoration;
       case RangeDayStatus.notInRange:
+        if (calendarDateTime.isToday) {
+          return calendarDateModel?.todayDecoration;
+        }
         return calendarDateModel?.decoration;
       default:
         return calendarDateModel?.headsDecoration;
@@ -123,6 +126,9 @@ class CalendarRangeDayWidget extends StatelessWidget {
       case RangeDayStatus.inRange:
         return calendarDateModel?.rangeStyle;
       case RangeDayStatus.notInRange:
+        if(calendarDateTime.isToday){
+          return calendarDateModel?.todayStyle;
+        }
         return calendarDateModel?.style;
       default:
         return calendarDateModel?.headsStyle;
