@@ -1,5 +1,6 @@
-import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
+import 'package:flutter_custom_calendar/src/model/picked_range_model.dart';
+import 'package:flutter_custom_calendar/src/model/selected_date_model.dart';
 import 'package:flutter_custom_calendar/src/provider/gregorian_calendar_provider.dart';
 import 'package:flutter_custom_calendar/src/provider/jalali_calendar_provider.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
@@ -7,13 +8,15 @@ import 'package:scoped_model/scoped_model.dart';
 
 abstract class CalendarProvider extends Model {
   CalendarType calendarType;
-  CalendarDateTime selectedDate;
+  SelectedDateModel selectedDate;
   CalendarMode calendarMode;
+  CalendarSelectionMode calendarSelectionMode;
 
   CalendarProvider({
     required this.calendarType,
     required this.selectedDate,
     required this.calendarMode,
+    required this.calendarSelectionMode,
   }) {
     initCalendarDateTime();
   }
@@ -23,19 +26,28 @@ abstract class CalendarProvider extends Model {
   factory CalendarProvider.createInstance({
     required CalendarType calendarType,
     required CalendarMode calendarMode,
-    required CalendarDateTime? selectedDate,
+    required SelectedDateModel? selectedDateModel,
+    required CalendarSelectionMode selectionMode,
   }) {
-    if (calendarType == CalendarType.gregorian) {
-      return GregorianCalendarProvider(
-        selectedDate: selectedDate,
-        calendarMode: calendarMode,
-      );
+    switch (calendarType) {
+      case CalendarType.jalali:
+        return JalaliCalendarProvider(
+          selectedDate: selectedDateModel,
+          calendarMode: calendarMode,
+          selectionMode: selectionMode,
+        );
+      case CalendarType.gregorian:
+        return GregorianCalendarProvider(
+          selectedDate: selectedDateModel,
+          calendarMode: calendarMode,
+          selectionMode: selectionMode,
+        );
     }
-    return JalaliCalendarProvider(
-      selectedDate: selectedDate,
-      calendarMode: calendarMode,
-    );
   }
+
+  CalendarDateTime get selectedSingleDate => selectedDate.singleDate!;
+
+  PickedRange get selectedRangeDates => selectedDate.rangeDates!;
 
   void initCalendarDateTime();
 
@@ -66,7 +78,7 @@ abstract class CalendarProvider extends Model {
     }
   }
 
-  void previousMonth(){
+  void previousMonth() {
     if (calendarDateTime.month == 1) {
       calendarDateTime = calendarDateTime.decreaseYear;
     } else {
@@ -76,8 +88,8 @@ abstract class CalendarProvider extends Model {
     }
   }
 
-  void selectCalendarDate(CalendarDateTime selectedDate) {
-    this.selectedDate = selectedDate;
+  void selectSingleCalendarDate(CalendarDateTime selectedDate) {
+    this.selectedDate.singleDate = selectedDate;
   }
 
   void changeCalendarMode(CalendarMode calendarMode) {

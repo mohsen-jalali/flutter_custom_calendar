@@ -1,4 +1,6 @@
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
+import 'package:flutter_custom_calendar/src/model/picked_range_model.dart';
+import 'package:flutter_custom_calendar/src/model/selected_date_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
 import 'package:flutter_custom_calendar/src/utils/jalali_extension.dart';
@@ -6,34 +8,55 @@ import 'package:shamsi_date/shamsi_date.dart';
 
 class JalaliCalendarProvider extends CalendarProvider {
   JalaliCalendarProvider({
-    required CalendarDateTime? selectedDate,
+    required SelectedDateModel? selectedDate,
     required CalendarMode calendarMode,
+    required CalendarSelectionMode selectionMode,
   }) : super(
           calendarType: CalendarType.jalali,
-          selectedDate:
-              selectedDate ?? CalendarDateTime.fromJalali(Jalali.now()),
+          selectedDate: selectedDate ??
+              SelectedDateModel(
+                singleDate: CalendarDateTime.fromJalali(Jalali.now()),
+                rangeDates: PickedRange(
+                  startDate: CalendarDateTime.fromJalali(Jalali.now()),
+                  endDate: CalendarDateTime.fromJalali(Jalali.now().addDays(4)),
+                ),
+              ),
           calendarMode: calendarMode,
+          calendarSelectionMode: selectionMode,
         );
 
   @override
   void initCalendarDateTime() {
-    if (selectedDate.calendarType == CalendarType.gregorian) {
-      selectedDate = selectedDate.changeCalendarType(CalendarType.jalali);
+    switch (calendarSelectionMode) {
+      case CalendarSelectionMode.range:
+        calendarDateTime = CalendarDateTime(
+          selectedRangeDates.startDate.year,
+          selectedRangeDates.startDate.month,
+          selectedRangeDates.startDate.day,
+          calendarType: CalendarType.gregorian,
+        );
+        break;
+      case CalendarSelectionMode.single:
+        if (selectedSingleDate.calendarType == CalendarType.gregorian) {
+          selectedDate.singleDate =
+              selectedSingleDate.changeCalendarType(CalendarType.jalali);
+        }
+        calendarDateTime = CalendarDateTime(
+          selectedSingleDate.year,
+          selectedSingleDate.month,
+          selectedSingleDate.day,
+          calendarType: CalendarType.gregorian,
+        );
+        break;
     }
-    calendarDateTime = CalendarDateTime(
-      selectedDate.year,
-      selectedDate.month,
-      selectedDate.day,
-      calendarType: CalendarType.jalali,
-    );
   }
 
   @override
   void selectCurrentDate() {
-    selectCalendarDate(CalendarDateTime.fromJalali(Jalali.now()));
+    selectSingleCalendarDate(CalendarDateTime.fromJalali(Jalali.now()));
     calendarDateTime = CalendarDateTime(
-      selectedDate.year,
-      selectedDate.month,
+      selectedSingleDate.year,
+      selectedSingleDate.month,
       1,
       calendarType: CalendarType.jalali,
     );
@@ -42,10 +65,9 @@ class JalaliCalendarProvider extends CalendarProvider {
   @override
   void nextWeek() {
     Jalali jalali = calendarDateTime.toJalali;
-    if(jalali.month != jalali.addDays(8-jalali.weekDay).month){
+    if (jalali.month != jalali.addDays(8 - jalali.weekDay).month) {
       nextMonth();
-    }
-    else{
+    } else {
       jalali = jalali.addDays(8 - jalali.weekDay);
       calendarDateTime = CalendarDateTime.fromJalali(jalali);
     }
@@ -54,11 +76,11 @@ class JalaliCalendarProvider extends CalendarProvider {
   @override
   void previousWeek() {
     Jalali jalali = calendarDateTime.toJalali;
-    if(jalali.month != jalali.subtract(Duration(days: jalali.weekDay - 1)).month){
+    if (jalali.month !=
+        jalali.subtract(Duration(days: jalali.weekDay - 1)).month) {
       jalali = jalali.subtract(Duration(days: jalali.weekDay - 1));
       calendarDateTime = CalendarDateTime.fromJalali(jalali);
-    }
-    else{
+    } else {
       jalali = jalali.subtract(Duration(days: jalali.weekDay));
       calendarDateTime = CalendarDateTime.fromJalali(jalali);
     }

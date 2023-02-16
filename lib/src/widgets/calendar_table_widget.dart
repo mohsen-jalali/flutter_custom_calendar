@@ -13,7 +13,7 @@ class CalendarTableWidget extends StatefulWidget {
   final CalendarType calendarType;
   final CalendarDateTime? selectedDate;
   final Function(CalendarDateTime)? onSelectDate;
-  final CalendarDayModel? calendarDayModel;
+  final CalendarDayModel calendarDayModel;
   final HeaderModel? headerModel;
   final CalendarMode calendarMode;
   final bool showOverflowDays;
@@ -23,9 +23,9 @@ class CalendarTableWidget extends StatefulWidget {
     required this.calendarType,
     required this.calendarMode,
     required this.showOverflowDays,
+    required this.calendarDayModel,
     this.selectedDate,
     this.onSelectDate,
-    this.calendarDayModel,
     this.headerModel,
   }) : super(key: key);
 
@@ -42,19 +42,20 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
 
   double get calendarHeight {
     if (calendarDates.length % 7 != 0) {
-      return (widget.calendarDayModel?.width ?? 50) * (calendarDates.length ~/ 7 + 1);
+      return (widget.calendarDayModel.width) * (calendarDates.length ~/ 7 + 1);
     }
-    return ((widget.calendarDayModel?.width ?? 50) * calendarDates.length ~/ 7).toDouble();
+    return ((widget.calendarDayModel.width) * calendarDates.length ~/ 7)
+        .toDouble();
   }
-
 
   @override
   void didUpdateWidget(covariant CalendarTableWidget oldWidget) {
     super.didUpdateWidget(oldWidget);
-    if(provider.calendarMode != oldWidget.calendarMode){
+    if (provider.calendarMode != oldWidget.calendarMode) {
       initialization();
     }
   }
+
   @override
   Widget build(BuildContext context) {
     return Column(
@@ -87,9 +88,9 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
               controller: pageController,
               onPageChanged: (pageIndex) => onPageChanged(pageIndex),
               itemBuilder: (context, index) => GridView.builder(
-                gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
+                gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                   crossAxisCount: 7,
-                  mainAxisExtent: widget.calendarDayModel?.width ?? 50,
+                  mainAxisExtent: widget.calendarDayModel.width,
                   childAspectRatio: 1,
                 ),
                 physics: const NeverScrollableScrollPhysics(),
@@ -106,7 +107,7 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
                           calendarDateModel: widget.calendarDayModel,
                           showOverFlowDays: widget.showOverflowDays,
                           isSelected:
-                              provider.selectedDate == calendarDates[index],
+                              provider.selectedSingleDate == calendarDates[index],
                           isOverFlow: provider.calendarDateTime.month !=
                               calendarDates[index].month,
                           onSelectDate: () => selectDate(calendarDates[index]),
@@ -129,16 +130,16 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
     super.initState();
   }
 
-  @override
-  void dispose() {
-    super.dispose();
-    pageController.dispose();
-  }
-
   void initialization() {
     postFrameCallback(() {
       getCalendarDates();
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    pageController.dispose();
   }
 
   void getCalendarDates() {
@@ -147,20 +148,18 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
   }
 
   void nextPage() {
-    if(provider.calendarMode == CalendarMode.weekly){
+    if (provider.calendarMode == CalendarMode.weekly) {
       provider.nextWeek();
-    }
-    else{
+    } else {
       provider.nextMonth();
     }
     getCalendarDates();
   }
 
   void previousPage() {
-    if(provider.calendarMode == CalendarMode.weekly){
+    if (provider.calendarMode == CalendarMode.weekly) {
       provider.previousWeek();
-    }
-    else{
+    } else {
       provider.previousMonth();
     }
     getCalendarDates();
@@ -178,11 +177,11 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
   void selectCurrentDate() {
     provider.selectCurrentDate();
     getCalendarDates();
-    widget.onSelectDate?.call(provider.selectedDate);
+    widget.onSelectDate?.call(provider.selectedSingleDate);
   }
 
   void selectDate(CalendarDateTime selectedDate) {
-    provider.selectCalendarDate(selectedDate);
+    provider.selectSingleCalendarDate(selectedDate);
     if (selectedDate.month != provider.calendarDateTime.month) {
       if (selectedDate.isAfter(provider.calendarDateTime) == 1) {
         pageController.nextPage(
@@ -200,10 +199,9 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
 
   void onChangedCalendarMode(DragUpdateDetails details) {
     ///Swiping up to change calendar mode to weekly
-    if(details.delta.dy < -10){
+    if (details.delta.dy < -10) {
       provider.changeCalendarMode(CalendarMode.weekly);
-    }
-    else if(details.delta.dy > 10){
+    } else if (details.delta.dy > 10) {
       provider.changeCalendarMode(CalendarMode.monthlyTable);
     }
   }

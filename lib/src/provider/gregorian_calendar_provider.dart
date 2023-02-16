@@ -1,37 +1,61 @@
 import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
+import 'package:flutter_custom_calendar/src/model/picked_range_model.dart';
+import 'package:flutter_custom_calendar/src/model/selected_date_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
 
 class GregorianCalendarProvider extends CalendarProvider {
   GregorianCalendarProvider({
-    required CalendarDateTime? selectedDate,
+    required SelectedDateModel? selectedDate,
     required CalendarMode calendarMode,
+    required CalendarSelectionMode selectionMode,
   }) : super(
           calendarType: CalendarType.gregorian,
-          selectedDate:
-              selectedDate ?? CalendarDateTime.fromDateTime(DateTime.now()),
+          selectedDate: selectedDate ??
+              SelectedDateModel(
+                singleDate: CalendarDateTime.fromDateTime(DateTime.now()),
+                rangeDates: PickedRange(
+                  startDate: CalendarDateTime.fromDateTime(DateTime.now()),
+                  endDate: CalendarDateTime.fromDateTime(
+                      DateTime.now().add(const Duration(days: 4))),
+                ),
+              ),
           calendarMode: calendarMode,
+          calendarSelectionMode: selectionMode,
         );
 
   @override
   void initCalendarDateTime() {
-    if (selectedDate.calendarType == CalendarType.jalali) {
-      selectedDate = selectedDate.changeCalendarType(CalendarType.gregorian);
+    switch (calendarSelectionMode) {
+      case CalendarSelectionMode.range:
+        calendarDateTime = CalendarDateTime(
+          selectedRangeDates.startDate.year,
+          selectedRangeDates.startDate.month,
+          selectedRangeDates.startDate.day,
+          calendarType: CalendarType.gregorian,
+        );
+        break;
+      case CalendarSelectionMode.single:
+        if (selectedSingleDate.calendarType == CalendarType.jalali) {
+          selectedDate.singleDate =
+              selectedSingleDate.changeCalendarType(CalendarType.gregorian);
+        }
+        calendarDateTime = CalendarDateTime(
+          selectedSingleDate.year,
+          selectedSingleDate.month,
+          selectedSingleDate.day,
+          calendarType: CalendarType.gregorian,
+        );
+        break;
     }
-    calendarDateTime = CalendarDateTime(
-      selectedDate.year,
-      selectedDate.month,
-      selectedDate.day,
-      calendarType: CalendarType.gregorian,
-    );
   }
 
   @override
   void selectCurrentDate() {
-    selectCalendarDate(CalendarDateTime.fromDateTime(DateTime.now()));
+    selectSingleCalendarDate(CalendarDateTime.fromDateTime(DateTime.now()));
     calendarDateTime = CalendarDateTime(
-      selectedDate.year,
-      selectedDate.month,
+      selectedSingleDate.year,
+      selectedSingleDate.month,
       1,
       calendarType: CalendarType.gregorian,
     );

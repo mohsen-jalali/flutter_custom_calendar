@@ -4,6 +4,7 @@ enum CalendarType { jalali, gregorian }
 
 enum CalendarMode { weekly, monthlyTable , monthlyLinear }
 
+enum CalendarSelectionMode { range, single }
 
 class CalendarDateTime {
   int year;

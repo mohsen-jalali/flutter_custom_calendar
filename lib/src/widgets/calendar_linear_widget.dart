@@ -5,7 +5,6 @@ import 'package:flutter_custom_calendar/src/utils/helper_functions.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
 import 'package:flutter_custom_calendar/src/widgets/calendar_day_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/calendar_header.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_week_day_row.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -92,7 +91,7 @@ class CalendarLinearWidgetState extends State<CalendarLinearWidget> {
                           showOverFlowDays: false,
                           showWeekdayTitle: true,
                           isSelected:
-                              provider.selectedDate == calendarDates[index],
+                              provider.selectedSingleDate == calendarDates[index],
                           isOverFlow: provider.calendarDateTime.month !=
                               calendarDates[index].month,
                           onSelectDate: () => selectDate(calendarDates[index],constraints.maxWidth),
@@ -155,19 +154,18 @@ class CalendarLinearWidgetState extends State<CalendarLinearWidget> {
   void selectCurrentDate(double calendarWidth) {
     provider.selectCurrentDate();
     getCalendarDates();
-    widget.onSelectDate?.call(provider.selectedDate);
+    widget.onSelectDate?.call(provider.selectedSingleDate);
     updateScrollPosition(calendarWidth);
   }
 
   void updateScrollPosition(double calendarWidth){
-    print(calendarWidth);
     double dayWidth = widget.calendarDayModel.width;
-    double offset = dayWidth * (provider.selectedDate.day - 1) - calendarWidth/2 + dayWidth/2;
+    double offset = dayWidth * (provider.selectedSingleDate.day - 1) - calendarWidth/2 + dayWidth/2;
     scrollController.animateTo(offset, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
   void selectDate(CalendarDateTime selectedDate,double calendarWidth) {
-    provider.selectCalendarDate(selectedDate);
+    provider.selectSingleCalendarDate(selectedDate);
     if (selectedDate.month != provider.calendarDateTime.month) {
       if (selectedDate.isAfter(provider.calendarDateTime) == 1) {
         pageController.nextPage(

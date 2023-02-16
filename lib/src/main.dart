@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
 import 'package:flutter_custom_calendar/src/model/custom_day_model.dart';
 import 'package:flutter_custom_calendar/src/model/custom_header_model.dart';
+import 'package:flutter_custom_calendar/src/model/selected_date_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
 import 'package:flutter_custom_calendar/src/widgets/calendar_linear_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/calendar_table_widget.dart';
@@ -63,8 +64,11 @@ class _CustomCalendarState extends State<CustomCalendar> {
   void initialCalendarProvider() {
     calendarProvider = CalendarProvider.createInstance(
       calendarType: widget.calendarType,
-      selectedDate: widget.selectedDate,
+      selectedDateModel: SelectedDateModel(
+        singleDate: widget.selectedDate,
+      ),
       calendarMode: widget.calendarMode,
+      selectionMode: CalendarSelectionMode.single,
     );
   }
 
