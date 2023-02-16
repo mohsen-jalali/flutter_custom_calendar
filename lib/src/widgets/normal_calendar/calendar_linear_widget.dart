@@ -165,7 +165,7 @@ class CalendarLinearWidgetState extends State<CalendarLinearWidget> {
   }
 
   void selectDate(CalendarDateTime selectedDate,double calendarWidth) {
-    provider.selectSingleCalendarDate(selectedDate);
+    provider.selectDate(selectedDate);
     if (selectedDate.month != provider.calendarDateTime.month) {
       if (selectedDate.isAfter(provider.calendarDateTime) == 1) {
         pageController.nextPage(

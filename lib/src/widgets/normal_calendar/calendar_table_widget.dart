@@ -181,7 +181,7 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
   }
 
   void selectDate(CalendarDateTime selectedDate) {
-    provider.selectSingleCalendarDate(selectedDate);
+    provider.selectDate(selectedDate);
     if (selectedDate.month != provider.calendarDateTime.month) {
       if (selectedDate.isAfter(provider.calendarDateTime) == 1) {
         pageController.nextPage(

@@ -88,11 +88,22 @@ abstract class CalendarProvider extends Model {
     }
   }
 
-  void selectSingleCalendarDate(CalendarDateTime selectedDate) {
+  void selectDate(CalendarDateTime selectedDate) {
+    switch (calendarSelectionMode) {
+      case CalendarSelectionMode.range:
+        _selectRangeCalendarDate(selectedDate);
+        break;
+      case CalendarSelectionMode.single:
+        _selectSingleDate(selectedDate);
+        break;
+    }
+  }
+
+  void _selectSingleDate(CalendarDateTime selectedDate) {
     this.selectedDate.singleDate = selectedDate;
   }
 
-  void selectRangeCalendarDate(CalendarDateTime selectedDate) {
+  void _selectRangeCalendarDate(CalendarDateTime selectedDate) {
     if (selectedDate.isAfter(selectedRangeDates.startDate) == -1) {
       this.selectedDate.rangeDates?.startDate = selectedDate;
     } else if (selectedDate.isAfter(selectedRangeDates.endDate) == 1) {
@@ -101,8 +112,7 @@ abstract class CalendarProvider extends Model {
       if (selectedRangeDates.startDate.differenceInDays(selectedDate) <
           selectedRangeDates.endDate.differenceInDays(selectedDate)) {
         this.selectedDate.rangeDates?.startDate = selectedDate;
-      }
-      else{
+      } else {
         this.selectedDate.rangeDates?.endDate = selectedDate;
       }
     }

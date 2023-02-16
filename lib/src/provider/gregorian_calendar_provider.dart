@@ -52,7 +52,7 @@ class GregorianCalendarProvider extends CalendarProvider {
 
   @override
   void selectCurrentDate() {
-    selectSingleCalendarDate(CalendarDateTime.fromDateTime(DateTime.now()));
+    selectDate(CalendarDateTime.fromDateTime(DateTime.now()));
     calendarDateTime = CalendarDateTime(
       selectedSingleDate.year,
       selectedSingleDate.month,

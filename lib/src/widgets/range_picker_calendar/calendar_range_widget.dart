@@ -174,7 +174,7 @@ class CalendarRangeWidgetState extends State<CalendarRangeWidget> {
   }
 
   void selectDate(CalendarDateTime selectedDate) {
-    provider.selectRangeCalendarDate(selectedDate);
+    provider.selectDate(selectedDate);
     widget.onSelectRange?.call(provider.selectedRangeDates);
     setState(() {});
   }

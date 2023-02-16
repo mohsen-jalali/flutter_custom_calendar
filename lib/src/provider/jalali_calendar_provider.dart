@@ -53,7 +53,7 @@ class JalaliCalendarProvider extends CalendarProvider {
 
   @override
   void selectCurrentDate() {
-    selectSingleCalendarDate(CalendarDateTime.fromJalali(Jalali.now()));
+    selectDate(CalendarDateTime.fromJalali(Jalali.now()));
     calendarDateTime = CalendarDateTime(
       selectedSingleDate.year,
       selectedSingleDate.month,
