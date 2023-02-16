@@ -92,6 +92,22 @@ abstract class CalendarProvider extends Model {
     this.selectedDate.singleDate = selectedDate;
   }
 
+  void selectRangeCalendarDate(CalendarDateTime selectedDate) {
+    if (selectedDate.isAfter(selectedRangeDates.startDate) == -1) {
+      this.selectedDate.rangeDates?.startDate = selectedDate;
+    } else if (selectedDate.isAfter(selectedRangeDates.endDate) == 1) {
+      this.selectedDate.rangeDates?.endDate = selectedDate;
+    } else {
+      if (selectedRangeDates.startDate.differenceInDays(selectedDate) <
+          selectedRangeDates.endDate.differenceInDays(selectedDate)) {
+        this.selectedDate.rangeDates?.startDate = selectedDate;
+      }
+      else{
+        this.selectedDate.rangeDates?.endDate = selectedDate;
+      }
+    }
+  }
+
   void changeCalendarMode(CalendarMode calendarMode) {
     this.calendarMode = calendarMode;
     notifyListeners();
