@@ -3,9 +3,9 @@ import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
 import 'package:flutter_custom_calendar/src/utils/helper_functions.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_day_widget.dart';
+import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_day_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/calendar_header.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_week_day_row.dart';
+import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_week_day_row.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 import 'package:scoped_model/scoped_model.dart';
 
