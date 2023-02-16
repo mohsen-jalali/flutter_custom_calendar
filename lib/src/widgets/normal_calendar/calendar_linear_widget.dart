@@ -69,7 +69,7 @@ class CalendarLinearWidgetState extends State<CalendarLinearWidget> {
             headerModel: widget.headerModel,
           ),
           SizedBox(
-            height: widget.calendarDayModel.height,
+            height: widget.calendarDayModel.height + (widget.calendarDayModel.padding?.bottom ?? 0),
             width: MediaQuery.of(context).size.width,
             child: PageView.builder(
               controller: pageController,

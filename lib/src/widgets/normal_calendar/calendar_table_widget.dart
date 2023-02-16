@@ -41,11 +41,12 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
   CalendarProvider get provider => ScopedModel.of<CalendarProvider>(context);
 
   double get calendarHeight {
+    double padding = (widget.calendarDayModel.padding?.bottom ?? 0);
     if (calendarDates.length % 7 != 0) {
-      return (widget.calendarDayModel.width) * (calendarDates.length ~/ 7 + 1);
+      return (widget.calendarDayModel.width) * (calendarDates.length ~/ 7 + 1) + padding;
     }
     return ((widget.calendarDayModel.width) * calendarDates.length ~/ 7)
-        .toDouble();
+        .toDouble() + padding;
   }
 
   @override
