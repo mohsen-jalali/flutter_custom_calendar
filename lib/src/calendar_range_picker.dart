@@ -6,6 +6,7 @@ import 'package:flutter_custom_calendar/src/model/custom_range_day_model.dart';
 import 'package:flutter_custom_calendar/src/model/picked_range_model.dart';
 import 'package:flutter_custom_calendar/src/model/selected_date_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
+import 'package:flutter_custom_calendar/src/utils/calendar_utils.dart';
 import 'package:flutter_custom_calendar/src/widgets/range_picker_calendar/calendar_range_widget.dart';
 import 'package:scoped_model/scoped_model.dart';
 
@@ -19,6 +20,8 @@ class CustomCalendarRangePicker extends StatefulWidget {
   final Decoration? calendarDecoration;
   final EdgeInsets? padding;
   final bool showOverFlowDays;
+  final List<String>? weekDaysTitles;
+  final List<String>? monthTitles;
 
   const CustomCalendarRangePicker({
     Key? key,
@@ -31,10 +34,13 @@ class CustomCalendarRangePicker extends StatefulWidget {
     this.headerModel,
     this.showOverFlowDays = false,
     this.onSelectRangeDates,
+    this.weekDaysTitles,
+    this.monthTitles,
   }) : super(key: key);
 
   @override
-  State<CustomCalendarRangePicker> createState() => _CustomCalendarRangePickerState();
+  State<CustomCalendarRangePicker> createState() =>
+      _CustomCalendarRangePickerState();
 }
 
 class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
@@ -61,9 +67,8 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
     calendarProvider = CalendarProvider.createInstance(
       calendarType: widget.calendarType,
       selectedDateModel: SelectedDateModel(
-        rangeDates: widget.selectedRange,
-        singleDate: CalendarDateTime.fromDateTime(DateTime.now())
-      ),
+          rangeDates: widget.selectedRange,
+          singleDate: CalendarDateTime.fromDateTime(DateTime.now())),
       calendarMode: CalendarMode.monthlyTable,
       selectionMode: CalendarSelectionMode.range,
     );
@@ -75,6 +80,14 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
 
   @override
   Widget build(BuildContext context) {
+
+    CalendarUtils.initialization(
+      calendarType: widget.calendarType,
+      context: context,
+      weekDaysTitle: widget.weekDaysTitles,
+      monthTitle: widget.monthTitles,
+    );
+
     return ScopedModel<CalendarProvider>(
       model: calendarProvider,
       child: Material(
@@ -100,7 +113,7 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
               calendarMode: provider.calendarMode,
               calendarType: widget.calendarType,
               headerModel: widget.headerModel,
-              calendarDayModel: widget.calendarRangeDayModel,
+              calendarRangeDayModel: widget.calendarRangeDayModel,
               onSelectRange: widget.onSelectRangeDates,
             ),
           ),

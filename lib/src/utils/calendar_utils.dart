@@ -3,7 +3,20 @@ import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
 
 class CalendarUtils {
-  static List<String> weekDaysTitle(CalendarType calendarType) {
+  static List<String> weekDaysTitles = [];
+  static List<String> monthsTitles = [];
+
+  static void initialization({
+    required CalendarType calendarType,
+    required BuildContext context,
+    List<String>? weekDaysTitle,
+    List<String>? monthTitle,
+  }) {
+    weekDaysTitles = weekDaysTitle ?? getWeekDaysTitle(calendarType);
+    monthsTitles = monthTitle ?? getMonthTitles(calendarType, context);
+  }
+
+  static List<String> getWeekDaysTitle(CalendarType calendarType) {
     switch (calendarType) {
       case CalendarType.jalali:
         return jalaliWeekDays;
@@ -12,27 +25,7 @@ class CalendarUtils {
     }
   }
 
-  static String getMonthName(
-      CalendarDateTime calendarDateTime, BuildContext context) {
-    switch (calendarDateTime.calendarType) {
-      case CalendarType.jalali:
-        switch (Localizations.localeOf(context).languageCode) {
-          case "fa":
-            return persianJalaliMonthTitles[calendarDateTime.toJalali.month - 1];
-          default:
-            return englishJalaliMonthTitles[calendarDateTime.toJalali.month - 1];
-        }
-      case CalendarType.gregorian:
-        switch (Localizations.localeOf(context).languageCode) {
-          case "fa":
-            return persianGregorianMonthTitles[calendarDateTime.toDateTime.month - 1];
-          default:
-            return englishGregorianMonthTitles[calendarDateTime.toDateTime.month - 1];
-        }
-    }
-  }
-
-  static List<String> monthTitles(
+  static List<String> getMonthTitles(
       CalendarType calendarType, BuildContext context) {
     switch (calendarType) {
       case CalendarType.jalali:
@@ -52,13 +45,14 @@ class CalendarUtils {
     }
   }
 
-  static String getDateWeekdayTitle(CalendarDateTime calendarDateTime,BuildContext context){
-    switch (calendarDateTime.calendarType) {
-      case CalendarType.jalali:
-        return jalaliWeekDays[calendarDateTime.toJalali.weekDay - 1];
-      case CalendarType.gregorian:
-        return gregorianWeekDays[calendarDateTime.toDateTime.weekday - 1];
-    }
+  static String getMonthName(
+      CalendarDateTime calendarDateTime, BuildContext context) {
+    return monthsTitles[calendarDateTime.month - 1];
+  }
+
+  static String getWeekdayTitle(
+      CalendarDateTime calendarDateTime, BuildContext context) {
+    return weekDaysTitles[calendarDateTime.weekDay - 1];
   }
 
   static const List<String> jalaliWeekDays = [
@@ -80,6 +74,7 @@ class CalendarUtils {
     "Sat",
     "Sun"
   ];
+
   static const List<String> persianJalaliMonthTitles = [
     "فروردین",
     "اردیبهشت",
@@ -94,6 +89,7 @@ class CalendarUtils {
     "بهمن",
     "اسفند",
   ];
+
   static const List<String> englishJalaliMonthTitles = [
     "Farvardin",
     "Ordibehesht",
@@ -108,6 +104,7 @@ class CalendarUtils {
     "Bahman",
     "Esfand"
   ];
+
   static const List<String> persianGregorianMonthTitles = [
     "ژانویه",
     "فوریه",
@@ -122,6 +119,7 @@ class CalendarUtils {
     "نوامبر",
     "دسامبر",
   ];
+
   static const List<String> englishGregorianMonthTitles = [
     "January",
     "February",

@@ -4,6 +4,7 @@ import 'package:flutter_custom_calendar/src/model/custom_day_model.dart';
 import 'package:flutter_custom_calendar/src/model/custom_header_model.dart';
 import 'package:flutter_custom_calendar/src/model/selected_date_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
+import 'package:flutter_custom_calendar/src/utils/calendar_utils.dart';
 import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_linear_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_table_widget.dart';
 import 'package:scoped_model/scoped_model.dart';
@@ -19,6 +20,8 @@ class CustomCalendar extends StatefulWidget {
   final Decoration? calendarDecoration;
   final EdgeInsets? padding;
   final bool showOverFlowDays;
+  final List<String>? weekDaysTitles;
+  final List<String>? monthTitles;
 
   const CustomCalendar({
     Key? key,
@@ -32,6 +35,8 @@ class CustomCalendar extends StatefulWidget {
     this.headerModel,
     this.showOverFlowDays = false,
     this.calendarMode = CalendarMode.monthlyTable,
+    this.weekDaysTitles,
+    this.monthTitles,
   }) : super(key: key);
 
   @override
@@ -57,7 +62,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     if (oldWidget.calendarType != widget.calendarType ||
         oldWidget.calendarMode != widget.calendarMode) {
       initialCalendarProvider();
-      updateWidgets();
+      initializeWidgets();
     }
   }
 
@@ -72,7 +77,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
     );
   }
 
-  void updateWidgets() {
+  void initializeWidgets() {
     switch (widget.calendarMode) {
       case CalendarMode.monthlyLinear:
         linearStateKey.currentState?.initialization();
@@ -83,8 +88,17 @@ class _CustomCalendarState extends State<CustomCalendar> {
     }
   }
 
+
   @override
   Widget build(BuildContext context) {
+
+    CalendarUtils.initialization(
+      calendarType: widget.calendarType,
+      context: context,
+      weekDaysTitle: widget.weekDaysTitles,
+      monthTitle: widget.monthTitles,
+    );
+
     return ScopedModel<CalendarProvider>(
       model: calendarProvider,
       child: Material(
