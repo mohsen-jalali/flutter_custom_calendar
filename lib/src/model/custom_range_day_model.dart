@@ -15,6 +15,8 @@ class CalendarRangeDayModel {
   final Decoration? todayDecoration;
   final EdgeInsets? padding;
   final bool disablePastDays;
+  final TextStyle? weekDayStyle;
+
 
   const CalendarRangeDayModel({
     this.height = 60,
@@ -25,6 +27,7 @@ class CalendarRangeDayModel {
     this.rangeStyle,
     this.headsStyle,
     this.disableStyle,
+    this.weekDayStyle,
     this.rangeDecoration = const BoxDecoration(
       shape: BoxShape.rectangle,
       color: Colors.lightBlueAccent,

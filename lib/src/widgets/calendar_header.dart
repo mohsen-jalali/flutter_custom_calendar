@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/src/utils/date_utils.dart';
+import 'package:flutter_custom_calendar/src/utils/calendar_utils.dart';
 
 class CalendarHeader extends StatelessWidget {
   final CalendarDateTime calendarDateTime;

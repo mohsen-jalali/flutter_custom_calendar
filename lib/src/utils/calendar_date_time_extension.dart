@@ -47,6 +47,13 @@ extension CalendarDateTimeExtension on CalendarDateTime {
     return Jalali(year, month, day);
   }
 
+  int get weekDay{
+    if(calendarType == CalendarType.gregorian){
+      return toDateTime.weekday;
+    }
+    return toJalali.weekDay;
+  }
+
   DateTime get toDateTime {
     if (calendarType == CalendarType.jalali) {
       return toJalali.toDateTime();

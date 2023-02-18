@@ -87,7 +87,7 @@ class CalendarLinearWidgetState extends State<CalendarLinearWidget> {
                       child: FadeInAnimation(
                         child: CalendarDayWidget(
                           calendarDateTime: calendarDates[index],
-                          calendarDateModel: widget.calendarDayModel,
+                          calendarDayModel: widget.calendarDayModel,
                           showOverFlowDays: false,
                           showWeekdayTitle: true,
                           isSelected:

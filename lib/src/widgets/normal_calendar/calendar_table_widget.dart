@@ -78,6 +78,7 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
         ),
         RowCalendarWeekDayTitle(
           calendarType: provider.calendarType,
+          textStyle: widget.calendarDayModel.weekDayStyle,
         ),
         GestureDetector(
           onPanUpdate: onChangedCalendarMode,
@@ -105,7 +106,7 @@ class CalendarTableWidgetState extends State<CalendarTableWidget> {
                       child: FadeInAnimation(
                         child: CalendarDayWidget(
                           calendarDateTime: calendarDates[index],
-                          calendarDateModel: widget.calendarDayModel,
+                          calendarDayModel: widget.calendarDayModel,
                           showOverFlowDays: widget.showOverflowDays,
                           isSelected:
                               provider.selectedSingleDate == calendarDates[index],

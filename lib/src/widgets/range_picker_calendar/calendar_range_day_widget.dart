@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
 import 'package:flutter_custom_calendar/src/model/custom_range_day_model.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
-import 'package:flutter_custom_calendar/src/utils/date_utils.dart';
+import 'package:flutter_custom_calendar/src/utils/calendar_utils.dart';
 
 enum RangeDayStatus { inRange, notInRange, startHead, endHead }
 
@@ -37,7 +37,7 @@ class CalendarRangeDayWidget extends StatelessWidget {
           visible: showWeekdayTitle,
           child: Center(
             child: Text(
-              CalendarUtils.getDateWeekdayTitle(calendarDateTime, context),
+              CalendarUtils.getWeekdayTitle(calendarDateTime, context),
             ),
           ),
         ),

@@ -1,11 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/src/model/custom_range_day_model.dart';
-import 'package:flutter_custom_calendar/src/model/picked_range_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_range_date_extensions.dart';
 import 'package:flutter_custom_calendar/src/utils/helper_functions.dart';
-import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
 import 'package:flutter_custom_calendar/src/widgets/calendar_header.dart';
 import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_week_day_row.dart';
 import 'package:flutter_custom_calendar/src/widgets/range_picker_calendar/calendar_range_day_widget.dart';
@@ -15,7 +12,7 @@ import 'package:scoped_model/scoped_model.dart';
 class CalendarRangeWidget extends StatefulWidget {
   final CalendarType calendarType;
   final Function(PickedRange)? onSelectRange;
-  final CalendarRangeDayModel calendarDayModel;
+  final CalendarRangeDayModel calendarRangeDayModel;
   final HeaderModel? headerModel;
   final CalendarMode calendarMode;
   final bool showOverflowDays;
@@ -25,7 +22,7 @@ class CalendarRangeWidget extends StatefulWidget {
     required this.calendarType,
     required this.calendarMode,
     required this.showOverflowDays,
-    required this.calendarDayModel,
+    required this.calendarRangeDayModel,
     this.headerModel,
     this.onSelectRange,
   }) : super(key: key);
@@ -42,11 +39,15 @@ class CalendarRangeWidgetState extends State<CalendarRangeWidget> {
   CalendarProvider get provider => ScopedModel.of<CalendarProvider>(context);
 
   double get calendarHeight {
+    double padding = (widget.calendarRangeDayModel.padding?.bottom ?? 0);
     if (calendarDates.length % 7 != 0) {
-      return (widget.calendarDayModel.width) * (calendarDates.length ~/ 7 + 1);
+      return (widget.calendarRangeDayModel.width) *
+              (calendarDates.length ~/ 7 + 1) +
+          padding;
     }
-    return ((widget.calendarDayModel.width) * calendarDates.length ~/ 7)
-        .toDouble();
+    return ((widget.calendarRangeDayModel.width) * calendarDates.length ~/ 7)
+            .toDouble() +
+        padding;
   }
 
   @override
@@ -77,6 +78,7 @@ class CalendarRangeWidgetState extends State<CalendarRangeWidget> {
         ),
         RowCalendarWeekDayTitle(
           calendarType: provider.calendarType,
+          textStyle: widget.calendarRangeDayModel.weekDayStyle,
         ),
         AnimatedContainer(
           height: calendarHeight,
@@ -88,7 +90,7 @@ class CalendarRangeWidgetState extends State<CalendarRangeWidget> {
             itemBuilder: (context, index) => GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 7,
-                mainAxisExtent: widget.calendarDayModel.width,
+                mainAxisExtent: widget.calendarRangeDayModel.width,
                 childAspectRatio: 1,
               ),
               physics: const NeverScrollableScrollPhysics(),
@@ -102,7 +104,7 @@ class CalendarRangeWidgetState extends State<CalendarRangeWidget> {
                     child: FadeInAnimation(
                       child: CalendarRangeDayWidget(
                         calendarDateTime: calendarDates[index],
-                        calendarDateModel: widget.calendarDayModel,
+                        calendarDateModel: widget.calendarRangeDayModel,
                         showOverFlowDays: widget.showOverflowDays,
                         isOverFlow: provider.calendarDateTime.month !=
                             calendarDates[index].month,

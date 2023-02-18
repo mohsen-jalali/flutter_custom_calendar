@@ -14,6 +14,7 @@ class CalendarDayModel {
   final bool disablePastDays;
   final Widget Function(CalendarDateTime)? tagBuilder;
   final Alignment tagAlignment;
+  final TextStyle? weekDayStyle;
 
   const CalendarDayModel({
     this.height = 60,
@@ -26,6 +27,7 @@ class CalendarDayModel {
     this.selectedDecoration,
     this.disableDecoration,
     this.tagBuilder,
+    this.weekDayStyle,
     this.disablePastDays = false,
     this.tagAlignment = Alignment.bottomRight,
   });
