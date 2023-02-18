@@ -11,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Flutter Custom Calendar',
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
@@ -39,13 +39,6 @@ class _MyHomePageState extends State<MyHomePage> {
   Color color = Colors.green;
 
 
-  List<String>? getWeekTitles(){
-    if(calendarType == CalendarType.gregorian){
-      return ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"];
-    }
-    return null;
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -62,21 +55,6 @@ class _MyHomePageState extends State<MyHomePage> {
               CustomCalendarRangePicker(
                 calendarType: calendarType,
                 showOverFlowDays: showOverflowDays,
-                monthTitles: [
-                  "فروردین",
-                  "اردیبهشت",
-                  "خرداد",
-                  "تیر",
-                  "مرداد",
-                  "شهریور",
-                  "مهر",
-                  "آبان",
-                  "آذر",
-                  "دی",
-                  "بهمن",
-                  "اسفند",
-                ],
-                weekDaysTitles: getWeekTitles(),
                 headerModel: const HeaderModel(
                     padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
                 calendarRangeDayModel: CalendarRangeDayModel(
@@ -97,49 +75,48 @@ class _MyHomePageState extends State<MyHomePage> {
               SizedBox(
                 height: 64,
               ),
-              // CustomCalendar(
-              //   calendarType: calendarType,
-              //   selectedDate: selectedDate,
-              //   showOverFlowDays: showOverflowDays,
-              //   calendarMode: calendarMode,
-              //   weekDaysTitles: getWeekTitles(),
-              //   onSelectDate: (selectedDate) {
-              //     this.selectedDate = selectedDate;
-              //     if (color == Colors.green) {
-              //       color = Colors.red;
-              //     } else {
-              //       color = Colors.green;
-              //     }
-              //     setState(() {});
-              //   },
-              //   headerModel: const HeaderModel(
-              //       padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
-              //   calendarDayModel: CalendarDayModel(
-              //     disablePastDays: disablePastDays,
-              //     width: 64,
-              //     height: 64,
-              //     padding: EdgeInsets.only(bottom: 10),
-              //     tagBuilder: (p0) => Container(
-              //       height: 25,
-              //       width: 25,
-              //       decoration: BoxDecoration(
-              //         color: Colors.black,
-              //         borderRadius: BorderRadius.circular(5)
-              //       ),
-              //       child: Center(child: Text(p0.day.toString(),style: TextStyle(color: Colors.white),)),
-              //     ),
-              //     decoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: Colors.blue,
-              //     ),
-              //     selectedDecoration: BoxDecoration(
-              //       shape: BoxShape.circle,
-              //       color: Colors.green,
-              //     ),
-              //     disableStyle: TextStyle(
-              //         fontSize: 16, color: Colors.black.withOpacity(0.4)),
-              //   ),
-              // ),
+              CustomCalendar(
+                calendarType: calendarType,
+                selectedDate: selectedDate,
+                showOverFlowDays: showOverflowDays,
+                calendarMode: calendarMode,
+                onSelectDate: (selectedDate) {
+                  this.selectedDate = selectedDate;
+                  if (color == Colors.green) {
+                    color = Colors.red;
+                  } else {
+                    color = Colors.green;
+                  }
+                  setState(() {});
+                },
+                headerModel: const HeaderModel(
+                    padding: EdgeInsets.symmetric(horizontal: 8, vertical: 10)),
+                calendarDayModel: CalendarDayModel(
+                  disablePastDays: disablePastDays,
+                  width: 64,
+                  height: 64,
+                  padding: EdgeInsets.only(bottom: 10),
+                  tagBuilder: (p0) => Container(
+                    height: 25,
+                    width: 25,
+                    decoration: BoxDecoration(
+                      color: Colors.black,
+                      borderRadius: BorderRadius.circular(5)
+                    ),
+                    child: Center(child: Text(p0.day.toString(),style: TextStyle(color: Colors.white),)),
+                  ),
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.blue,
+                  ),
+                  selectedDecoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: Colors.green,
+                  ),
+                  disableStyle: TextStyle(
+                      fontSize: 16, color: Colors.black.withOpacity(0.4)),
+                ),
+              ),
               const SizedBox(
                 height: 36,
               ),
