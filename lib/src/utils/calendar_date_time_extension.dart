@@ -13,9 +13,9 @@ extension CalendarDateTimeExtension on CalendarDateTime {
 
   CalendarDateTime changeCalendarType(CalendarType calendarType) {
     if (calendarType == CalendarType.jalali) {
-      return CalendarDateTime.fromJalali(toDateTime.toJalali());
+      return CalendarDateTime.fromJalali(toJalali);
     }
-    return CalendarDateTime.fromDateTime(toJalali.toDateTime());
+    return CalendarDateTime.fromDateTime(toDateTime);
   }
 
   bool get isToday {
