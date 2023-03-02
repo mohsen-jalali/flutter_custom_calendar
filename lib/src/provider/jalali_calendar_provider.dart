@@ -1,5 +1,4 @@
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/src/model/picked_range_model.dart';
 import 'package:flutter_custom_calendar/src/model/selected_date_model.dart';
 import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
@@ -33,7 +32,7 @@ class JalaliCalendarProvider extends CalendarProvider {
           selectedRangeDates.startDate.year,
           selectedRangeDates.startDate.month,
           selectedRangeDates.startDate.day,
-          calendarType: CalendarType.gregorian,
+          calendarType: CalendarType.jalali,
         );
         break;
       case CalendarSelectionMode.single:
@@ -45,7 +44,7 @@ class JalaliCalendarProvider extends CalendarProvider {
           selectedSingleDate.year,
           selectedSingleDate.month,
           selectedSingleDate.day,
-          calendarType: CalendarType.gregorian,
+          calendarType: CalendarType.jalali,
         );
         break;
     }
