@@ -56,7 +56,7 @@ class JalaliCalendarProvider extends CalendarProvider {
     calendarDateTime = CalendarDateTime(
       selectedSingleDate.year,
       selectedSingleDate.month,
-      1,
+      selectedSingleDate.day,
       calendarType: CalendarType.jalali,
     );
   }
