@@ -2,13 +2,12 @@ import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
 import 'package:flutter_custom_calendar/src/model/custom_range_day_model.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
-import 'package:flutter_custom_calendar/src/utils/calendar_utils.dart';
 
 enum RangeDayStatus { inRange, notInRange, startHead, endHead }
 
 class CalendarRangeDayWidget extends StatelessWidget {
   final CalendarDateTime calendarDateTime;
-  final CalendarRangeDayModel? calendarDateModel;
+  final CalendarRangeDayModel? calendarRangeDayModel;
   final VoidCallback onSelectDate;
   final RangeDayStatus status;
   final bool isOverFlow;
@@ -23,7 +22,7 @@ class CalendarRangeDayWidget extends StatelessWidget {
     required this.isOverFlow,
     this.showOverFlowDays = false,
     this.showWeekdayTitle = false,
-    this.calendarDateModel,
+    this.calendarRangeDayModel,
   }) : super(key: key);
 
   @override
@@ -31,107 +30,106 @@ class CalendarRangeDayWidget extends StatelessWidget {
     if (showOverFlowDays == false && isOverFlow) {
       return const SizedBox.shrink();
     }
-    return Column(
+    return Stack(
       children: [
-        Visibility(
-          visible: showWeekdayTitle,
-          child: Center(
-            child: Text(
-              CalendarUtils.getWeekdayTitle(calendarDateTime, context),
-            ),
-          ),
-        ),
-        Expanded(
-          child: Container(
-            height: calendarDateModel?.height,
-            width: calendarDateModel?.width,
-            decoration: BoxDecoration(
-                color: backgroundColor,
-                borderRadius: BorderRadius.only(
-                  bottomLeft: status == RangeDayStatus.startHead
-                      ? const Radius.circular(1000)
-                      : Radius.zero,
-                  topLeft: status == RangeDayStatus.startHead
-                      ? const Radius.circular(1000)
-                      : Radius.zero,
-                  topRight: status == RangeDayStatus.endHead
-                      ? const Radius.circular(1000)
-                      : Radius.zero,
-                  bottomRight: status == RangeDayStatus.endHead
-                      ? const Radius.circular(1000)
-                      : Radius.zero,
-                )),
-            child: Center(
+        Row(
+          textDirection: status == RangeDayStatus.startHead
+              ? TextDirection.rtl
+              : TextDirection.ltr,
+          children: [
+            Expanded(
               child: Container(
-                height: calendarDateModel?.height,
-                width: calendarDateModel?.width,
-                margin: calendarDateModel?.padding,
-                decoration: decoration,
-                child: InkWell(
-                  onTap: isDisable ? null : onSelectDate,
-                  child: Center(
-                    child: Text(
-                      calendarDateTime.day.toString(),
-                      style: textStyle ??
-                          const TextStyle(fontSize: 16, color: Colors.black),
-                    ),
-                  ),
-                ),
+                margin: calendarRangeDayModel?.padding,
+                height: calendarRangeDayModel?.height,
+                decoration: BoxDecoration(
+                  color: backgroundColor,
+                    borderRadius: BorderRadius.only(
+                      bottomLeft: status == RangeDayStatus.startHead
+                          ? const Radius.circular(10)
+                          : Radius.zero,
+                      topLeft: status == RangeDayStatus.startHead
+                          ? const Radius.circular(10)
+                          : Radius.zero,
+                      topRight: status == RangeDayStatus.endHead
+                          ? const Radius.circular(10)
+                          : Radius.zero,
+                      bottomRight: status == RangeDayStatus.endHead
+                          ? const Radius.circular(10)
+                          : Radius.zero,
+                    )                ),
+              ),
+            ),
+            const Expanded(child: SizedBox())
+          ],
+        ),
+        Container(
+          margin: calendarRangeDayModel?.padding,
+          height: calendarRangeDayModel?.height,
+          decoration: decoration,
+          child: InkWell(
+            onTap: isDisable ? null : onSelectDate,
+            child: Center(
+              child: Text(
+                calendarDateTime.day.toString(),
+                style: textStyle ??
+                    const TextStyle(fontSize: 16, color: Colors.black),
               ),
             ),
           ),
-        ),
+        )
       ],
     );
   }
 
+  bool get isDisable {
+    return calendarDateTime.isBeforeNow &&
+        (calendarRangeDayModel?.disablePastDays ?? false);
+  }
+
   Color? get backgroundColor {
     if (isOverFlow) return null;
+    if ((calendarRangeDayModel?.rangeDecoration as BoxDecoration).shape !=
+        BoxShape.rectangle) return null;
     if (status == RangeDayStatus.startHead ||
         status == RangeDayStatus.endHead) {
-      return calendarDateModel?.rangeDecoration != null
-          ? (calendarDateModel?.rangeDecoration as BoxDecoration).color
+      return calendarRangeDayModel?.rangeDecoration != null
+          ? (calendarRangeDayModel?.rangeDecoration as BoxDecoration).color
           : null;
     }
     return null;
   }
 
-  bool get isDisable {
-    return calendarDateTime.isBeforeNow &&
-        (calendarDateModel?.disablePastDays ?? false);
-  }
-
   Decoration? get decoration {
     if (isDisable || isOverFlow) {
-      return calendarDateModel?.disableDecoration;
+      return calendarRangeDayModel?.disableDecoration;
     }
     switch (status) {
       case RangeDayStatus.inRange:
-        return calendarDateModel?.rangeDecoration;
+        return calendarRangeDayModel?.rangeDecoration;
       case RangeDayStatus.notInRange:
         if (calendarDateTime.isToday) {
-          return calendarDateModel?.todayDecoration;
+          return calendarRangeDayModel?.todayDecoration;
         }
-        return calendarDateModel?.decoration;
+        return calendarRangeDayModel?.decoration;
       default:
-        return calendarDateModel?.headsDecoration;
+        return calendarRangeDayModel?.headsDecoration;
     }
   }
 
   TextStyle? get textStyle {
     if (isDisable || isOverFlow) {
-      return calendarDateModel?.disableStyle;
+      return calendarRangeDayModel?.disableStyle;
     }
     switch (status) {
       case RangeDayStatus.inRange:
-        return calendarDateModel?.rangeStyle;
+        return calendarRangeDayModel?.rangeStyle;
       case RangeDayStatus.notInRange:
-        if(calendarDateTime.isToday){
-          return calendarDateModel?.todayStyle;
+        if (calendarDateTime.isToday) {
+          return calendarRangeDayModel?.todayStyle;
         }
-        return calendarDateModel?.style;
+        return calendarRangeDayModel?.style;
       default:
-        return calendarDateModel?.headsStyle;
+        return calendarRangeDayModel?.headsStyle;
     }
   }
 }

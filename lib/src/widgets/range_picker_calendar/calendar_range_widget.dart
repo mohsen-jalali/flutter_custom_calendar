@@ -90,8 +90,7 @@ class CalendarRangeWidgetState extends State<CalendarRangeWidget> {
             itemBuilder: (context, index) => GridView.builder(
               gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
                 crossAxisCount: 7,
-                mainAxisExtent: widget.calendarRangeDayModel.width,
-                childAspectRatio: 1,
+                mainAxisExtent: widget.calendarRangeDayModel.height,
               ),
               physics: const NeverScrollableScrollPhysics(),
               itemCount: calendarDates.length,
@@ -104,7 +103,7 @@ class CalendarRangeWidgetState extends State<CalendarRangeWidget> {
                     child: FadeInAnimation(
                       child: CalendarRangeDayWidget(
                         calendarDateTime: calendarDates[index],
-                        calendarDateModel: widget.calendarRangeDayModel,
+                        calendarRangeDayModel: widget.calendarRangeDayModel,
                         showOverFlowDays: widget.showOverflowDays,
                         isOverFlow: provider.calendarDateTime.month !=
                             calendarDates[index].month,
