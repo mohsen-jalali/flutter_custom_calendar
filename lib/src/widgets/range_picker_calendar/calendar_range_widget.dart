@@ -16,6 +16,7 @@ class CalendarRangeWidget extends StatefulWidget {
   final HeaderModel? headerModel;
   final CalendarMode calendarMode;
   final bool showOverflowDays;
+  final EdgeInsets? padding;
 
   const CalendarRangeWidget({
     Key? key,
@@ -25,6 +26,7 @@ class CalendarRangeWidget extends StatefulWidget {
     required this.calendarRangeDayModel,
     this.headerModel,
     this.onSelectRange,
+    this.padding,
   }) : super(key: key);
 
   @override
@@ -82,6 +84,7 @@ class CalendarRangeWidgetState extends State<CalendarRangeWidget> {
         ),
         AnimatedContainer(
           height: calendarHeight,
+          padding: widget.padding,
           width: MediaQuery.of(context).size.width,
           duration: const Duration(milliseconds: 300),
           child: PageView.builder(

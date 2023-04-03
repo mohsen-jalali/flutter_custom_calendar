@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/src/model/calendar_date_time.dart';
-import 'package:flutter_custom_calendar/src/model/custom_day_model.dart';
 import 'package:flutter_custom_calendar/src/model/custom_header_model.dart';
 import 'package:flutter_custom_calendar/src/model/custom_range_day_model.dart';
 import 'package:flutter_custom_calendar/src/model/picked_range_model.dart';
@@ -133,7 +132,6 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
       child: Material(
         color: Colors.transparent,
         child: Container(
-          padding: widget.padding,
           clipBehavior: Clip.antiAlias,
           decoration: widget.calendarDecoration ??
               BoxDecoration(
@@ -155,6 +153,7 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
               headerModel: widget.headerModel,
               calendarRangeDayModel: widget.calendarRangeDayModel,
               onSelectRange: widget.onSelectRangeDates,
+              padding: widget.padding,
             ),
           ),
         ),

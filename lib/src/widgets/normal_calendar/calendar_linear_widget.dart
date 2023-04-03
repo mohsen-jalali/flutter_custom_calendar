@@ -16,6 +16,7 @@ class CalendarLinearWidget extends StatefulWidget {
   final HeaderModel? headerModel;
   final CalendarMode calendarMode;
   final bool showOverflowDays;
+  final EdgeInsets? padding;
 
   const CalendarLinearWidget({
     Key? key,
@@ -26,6 +27,7 @@ class CalendarLinearWidget extends StatefulWidget {
     this.selectedDate,
     this.onSelectDate,
     this.headerModel,
+    this.padding,
   }) : super(key: key);
 
   @override
@@ -68,7 +70,8 @@ class CalendarLinearWidgetState extends State<CalendarLinearWidget> {
             onPressCurrentDate: () => selectCurrentDate(constraints.maxWidth),
             headerModel: widget.headerModel,
           ),
-          SizedBox(
+          Container(
+            padding: widget.padding,
             height: widget.calendarDayModel.height + (widget.calendarDayModel.padding?.bottom ?? 0),
             width: MediaQuery.of(context).size.width,
             child: PageView.builder(

@@ -173,6 +173,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     headerModel: widget.headerModel,
                     calendarDayModel: widget.calendarDayModel,
                     onSelectDate: widget.onSelectDate,
+                    padding: widget.padding,
                   );
                 default:
                   return CalendarTableWidget(
@@ -184,6 +185,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     headerModel: widget.headerModel,
                     calendarDayModel: widget.calendarDayModel,
                     onSelectDate: widget.onSelectDate,
+                    padding: widget.padding,
                   );
               }
             },
