@@ -50,7 +50,10 @@ class CalendarDayModel {
     this.style,
     this.selectedStyle,
     this.disableStyle,
-    this.selectedDecoration,
+    this.selectedDecoration = const BoxDecoration(
+      color: Colors.blue,
+      shape: BoxShape.circle,
+    ),
     this.disableDecoration,
     this.tagBuilder,
     this.weekDayStyle,
