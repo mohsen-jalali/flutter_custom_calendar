@@ -97,7 +97,7 @@ class CalendarLinearWidgetState
 
   @override
   void nextPage() {
-    super.previousPage();
+    super.nextPage();
     resetScrollController();
   }
 
