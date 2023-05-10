@@ -42,7 +42,9 @@ class CalendarDayModel {
   /// [TextStyle] of the weekDay title can be set by [weekDayStyle].
   final TextStyle? weekDayStyle;
 
-  const CalendarDayModel({
+  final bool Function(CalendarDateTime calendarDateTime)? isDisableDay;
+
+  const CalendarDayModel( {
     this.height = 60,
     this.width = 60,
     this.decoration,
@@ -57,6 +59,7 @@ class CalendarDayModel {
     this.disableDecoration,
     this.tagBuilder,
     this.weekDayStyle,
+    this.isDisableDay,
     this.disablePastDays = false,
     this.tagAlignment = Alignment.bottomRight,
   });
