@@ -42,7 +42,7 @@ class JalaliCalendarProvider extends CalendarProvider {
         break;
       case CalendarSelectionMode.single:
         if (selectedSingleDate != null &&
-            selectedSingleDate!.calendarType == CalendarType.jalali) {
+            selectedSingleDate!.calendarType == CalendarType.gregorian) {
           selectedDate.singleDate =
               selectedSingleDate!.changeCalendarType(CalendarType.jalali);
           calendarDateTime = CalendarDateTime(
