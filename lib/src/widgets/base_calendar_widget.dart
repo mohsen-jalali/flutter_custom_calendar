@@ -13,8 +13,6 @@ abstract class BaseCalendarWidget extends StatefulWidget {
   final HeaderModel? headerModel;
   final CalendarMode calendarMode;
   final EdgeInsets? padding;
-  final DateTime? maxDate;
-  final DateTime? minDate;
   final TextStyle? weekDayStyle;
   final bool hasWeekDayTitle;
   final EdgeInsets? calendarPadding;
@@ -26,8 +24,6 @@ abstract class BaseCalendarWidget extends StatefulWidget {
     this.onSelectDate,
     this.headerModel,
     this.padding,
-    this.maxDate,
-    this.minDate,
     this.weekDayStyle,
     this.calendarPadding,
     this.hasWeekDayTitle = true,

@@ -21,8 +21,6 @@ class CalendarLinearWidget extends BaseCalendarWidget {
     Function(CalendarDateTime)? onSelectDate,
     HeaderModel? headerModel,
     EdgeInsets? padding,
-    DateTime? maxDate,
-    DateTime? minDate,
     TextStyle? weekDayStyle,
     EdgeInsets? calendarPadding,
   }) : super(
@@ -30,8 +28,6 @@ class CalendarLinearWidget extends BaseCalendarWidget {
           calendarMode: calendarMode,
           selectedDate: selectedDate,
           headerModel: headerModel,
-          maxDate: maxDate,
-          minDate: minDate,
           onSelectDate: onSelectDate,
           padding: padding,
           weekDayStyle: weekDayStyle,

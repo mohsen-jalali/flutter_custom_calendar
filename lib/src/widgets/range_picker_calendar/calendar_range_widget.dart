@@ -1,12 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
-import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
 import 'package:flutter_custom_calendar/src/utils/calendar_range_date_extensions.dart';
-import 'package:flutter_custom_calendar/src/utils/context_extensions.dart';
-import 'package:flutter_custom_calendar/src/utils/helper_functions.dart';
 import 'package:flutter_custom_calendar/src/widgets/base_calendar_widget.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_container_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/range_picker_calendar/calendar_range_day_widget.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
@@ -27,8 +22,6 @@ class CalendarRangeWidget extends BaseCalendarWidget {
     Function(CalendarDateTime)? onSelectDate,
     HeaderModel? headerModel,
     EdgeInsets? padding,
-    DateTime? maxDate,
-    DateTime? minDate,
     TextStyle? weekDayStyle,
     EdgeInsets? calendarPadding,
   }) : super(
@@ -36,8 +29,6 @@ class CalendarRangeWidget extends BaseCalendarWidget {
           calendarMode: calendarMode,
           selectedDate: selectedDate,
           headerModel: headerModel,
-          maxDate: maxDate,
-          minDate: minDate,
           onSelectDate: onSelectDate,
           padding: padding,
           weekDayStyle: weekDayStyle,
