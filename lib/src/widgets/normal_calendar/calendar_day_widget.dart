@@ -33,14 +33,20 @@ class CalendarDayWidget extends StatelessWidget {
       children: [
         Visibility(
           visible: showWeekdayTitle,
-          child: Center(
-            child: Text(
-              CalendarUtils.getWeekdayTitle(calendarDateTime, context),
-              style: calendarDayModel.weekDayStyle,
+          child: SizedBox(
+            height: 32,
+            child: Center(
+              child: Padding(
+                padding: const EdgeInsets.only(bottom: 6.0),
+                child: Text(
+                  CalendarUtils.getWeekdayTitle(calendarDateTime, context),
+                  style: calendarDayModel.weekDayStyle,
+                ),
+              ),
             ),
           ),
         ),
-        Expanded(
+        Flexible(
           child: AnimatedContainer(
             height: calendarDayModel.height,
             width: calendarDayModel.width,
@@ -73,6 +79,9 @@ class CalendarDayWidget extends StatelessWidget {
   }
 
   bool get isDisable {
+    if(calendarDayModel.isDisableDay != null){
+      return calendarDayModel.isDisableDay!.call(calendarDateTime);
+    }
     return calendarDateTime.isBeforeNow && calendarDayModel.disablePastDays;
   }
 
