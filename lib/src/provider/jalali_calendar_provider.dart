@@ -28,24 +28,33 @@ class JalaliCalendarProvider extends CalendarProvider {
   void initCalendarDateTime() {
     switch (calendarSelectionMode) {
       case CalendarSelectionMode.range:
-        calendarDateTime = CalendarDateTime(
-          selectedRangeDates.startDate.year,
-          selectedRangeDates.startDate.month,
-          selectedRangeDates.startDate.day,
-          calendarType: CalendarType.jalali,
-        );
+        if (selectedRangeDates!.startDate != null) {
+          calendarDateTime = CalendarDateTime(
+            selectedRangeDates!.startDate!.year,
+            selectedRangeDates!.startDate!.month,
+            selectedRangeDates!.startDate!.day,
+            calendarType: CalendarType.jalali,
+          );
+        } else {
+          calendarDateTime = CalendarDateTime.fromDateTime(DateTime.now())
+              .changeCalendarType(calendarType);
+        }
         break;
       case CalendarSelectionMode.single:
-        if (selectedSingleDate.calendarType == CalendarType.gregorian) {
+        if (selectedSingleDate != null &&
+            selectedSingleDate!.calendarType == CalendarType.jalali) {
           selectedDate.singleDate =
-              selectedSingleDate.changeCalendarType(CalendarType.jalali);
+              selectedSingleDate!.changeCalendarType(CalendarType.jalali);
+          calendarDateTime = CalendarDateTime(
+            selectedSingleDate!.year,
+            selectedSingleDate!.month,
+            selectedSingleDate!.day,
+            calendarType: CalendarType.jalali,
+          );
+        } else {
+          calendarDateTime = CalendarDateTime.fromDateTime(DateTime.now())
+              .changeCalendarType(calendarType);
         }
-        calendarDateTime = CalendarDateTime(
-          selectedSingleDate.year,
-          selectedSingleDate.month,
-          selectedSingleDate.day,
-          calendarType: CalendarType.jalali,
-        );
         break;
     }
   }
@@ -54,9 +63,9 @@ class JalaliCalendarProvider extends CalendarProvider {
   void selectCurrentDate() {
     selectDate(CalendarDateTime.fromJalali(Jalali.now()));
     calendarDateTime = CalendarDateTime(
-      selectedSingleDate.year,
-      selectedSingleDate.month,
-      selectedSingleDate.day,
+      selectedSingleDate!.year,
+      selectedSingleDate!.month,
+      selectedSingleDate!.day,
       calendarType: CalendarType.jalali,
     );
   }

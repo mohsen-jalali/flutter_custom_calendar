@@ -28,24 +28,33 @@ class GregorianCalendarProvider extends CalendarProvider {
   void initCalendarDateTime() {
     switch (calendarSelectionMode) {
       case CalendarSelectionMode.range:
-        calendarDateTime = CalendarDateTime(
-          selectedRangeDates.startDate.year,
-          selectedRangeDates.startDate.month,
-          selectedRangeDates.startDate.day,
-          calendarType: CalendarType.gregorian,
-        );
+        if (selectedRangeDates!.startDate != null) {
+          calendarDateTime = CalendarDateTime(
+            selectedRangeDates!.startDate!.year,
+            selectedRangeDates!.startDate!.month,
+            selectedRangeDates!.startDate!.day,
+            calendarType: CalendarType.gregorian,
+          );
+        } else {
+          calendarDateTime = CalendarDateTime.fromDateTime(DateTime.now())
+              .changeCalendarType(calendarType);
+        }
         break;
       case CalendarSelectionMode.single:
-        if (selectedSingleDate.calendarType == CalendarType.jalali) {
+        if (selectedSingleDate != null &&
+            selectedSingleDate!.calendarType == CalendarType.jalali) {
           selectedDate.singleDate =
-              selectedSingleDate.changeCalendarType(CalendarType.gregorian);
+              selectedSingleDate!.changeCalendarType(CalendarType.gregorian);
+          calendarDateTime = CalendarDateTime(
+            selectedSingleDate!.year,
+            selectedSingleDate!.month,
+            selectedSingleDate!.day,
+            calendarType: CalendarType.gregorian,
+          );
+        } else {
+          calendarDateTime = CalendarDateTime.fromDateTime(DateTime.now())
+              .changeCalendarType(calendarType);
         }
-        calendarDateTime = CalendarDateTime(
-          selectedSingleDate.year,
-          selectedSingleDate.month,
-          selectedSingleDate.day,
-          calendarType: CalendarType.gregorian,
-        );
         break;
     }
   }
@@ -54,9 +63,9 @@ class GregorianCalendarProvider extends CalendarProvider {
   void selectCurrentDate() {
     selectDate(CalendarDateTime.fromDateTime(DateTime.now()));
     calendarDateTime = CalendarDateTime(
-      selectedSingleDate.year,
-      selectedSingleDate.month,
-      selectedSingleDate.day,
+      selectedSingleDate!.year,
+      selectedSingleDate!.month,
+      selectedSingleDate!.day,
       calendarType: CalendarType.gregorian,
     );
   }

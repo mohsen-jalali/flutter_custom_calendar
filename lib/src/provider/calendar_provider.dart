@@ -45,9 +45,9 @@ abstract class CalendarProvider extends Model {
     }
   }
 
-  CalendarDateTime get selectedSingleDate => selectedDate.singleDate!;
+  CalendarDateTime? get selectedSingleDate => selectedDate.singleDate;
 
-  PickedRange get selectedRangeDates => selectedDate.rangeDates!;
+  PickedRange? get selectedRangeDates => selectedDate.rangeDates;
 
   void initCalendarDateTime();
 
@@ -88,6 +88,16 @@ abstract class CalendarProvider extends Model {
     }
   }
 
+  void goToMonth(int month) {
+    calendarDateTime = CalendarDateTime(calendarDateTime.year, month, 1,
+        calendarType: calendarType);
+  }
+
+  void goToYear(int year) {
+    calendarDateTime = CalendarDateTime(year, calendarDateTime.month, 1,
+        calendarType: calendarType);
+  }
+
   void selectDate(CalendarDateTime selectedDate) {
     switch (calendarSelectionMode) {
       case CalendarSelectionMode.range:
@@ -104,16 +114,27 @@ abstract class CalendarProvider extends Model {
   }
 
   void _selectRangeCalendarDate(CalendarDateTime selectedDate) {
-    if (selectedDate.isAfter(selectedRangeDates.startDate) == -1) {
-      this.selectedDate.rangeDates?.startDate = selectedDate;
-    } else if (selectedDate.isAfter(selectedRangeDates.endDate) == 1) {
-      this.selectedDate.rangeDates?.endDate = selectedDate;
+    if (selectedRangeDates!.startDate == null &&
+        selectedRangeDates!.endDate == null) {
+      selectedRangeDates?.startDate = selectedDate;
+    } else if (selectedRangeDates!.startDate != null &&
+        selectedRangeDates!.endDate == null) {
+      if (selectedRangeDates!.startDate!.isAfter(selectedDate) == 1) {
+        selectedRangeDates!.endDate = selectedRangeDates!.startDate;
+        selectedRangeDates!.startDate = selectedDate;
+      }
     } else {
-      if (selectedRangeDates.startDate.differenceInDays(selectedDate) <
-          selectedRangeDates.endDate.differenceInDays(selectedDate)) {
-        this.selectedDate.rangeDates?.startDate = selectedDate;
+      if (selectedDate.isAfter(selectedRangeDates!.startDate!) == -1) {
+        selectedRangeDates?.startDate = selectedDate;
+      } else if (selectedDate.isAfter(selectedRangeDates!.endDate!) == 1) {
+        selectedRangeDates?.endDate = selectedDate;
       } else {
-        this.selectedDate.rangeDates?.endDate = selectedDate;
+        if (selectedRangeDates!.startDate!.differenceInDays(selectedDate) <
+            selectedRangeDates!.endDate!.differenceInDays(selectedDate)) {
+          selectedRangeDates!.startDate = selectedDate;
+        } else {
+          selectedRangeDates!.endDate = selectedDate;
+        }
       }
     }
   }
