@@ -146,20 +146,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
       child: Material(
         color: Colors.transparent,
         child: Container(
-          padding: widget.padding,
-          clipBehavior: Clip.antiAlias,
-          decoration: widget.calendarDecoration ??
-              BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 0,
-                    blurRadius: 10,
-                  )
-                ],
-              ),
+          decoration: widget.calendarDecoration,
           child: ScopedModelDescendant<CalendarProvider>(
             builder: (context, child, provider) {
               switch (provider.calendarMode) {
@@ -174,6 +161,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     calendarDayModel: widget.calendarDayModel,
                     onSelectDate: widget.onSelectDate,
                     padding: widget.padding,
+                    calendarPadding: widget.padding,
                   );
                 default:
                   return CalendarTableWidget(
@@ -186,6 +174,8 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     calendarDayModel: widget.calendarDayModel,
                     onSelectDate: widget.onSelectDate,
                     padding: widget.padding,
+                    calendarPadding: widget.padding,
+                    weekDayStyle: widget.calendarDayModel.weekDayStyle,
                   );
               }
             },
