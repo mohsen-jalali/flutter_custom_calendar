@@ -38,7 +38,7 @@ class CalendarHeader extends StatelessWidget {
           children: [
             IconButton(
               onPressed: onPressBackOnMenu,
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back_ios),
               color: headerModel?.iconsColor ?? Colors.black,
               splashRadius: 20,
             ),
@@ -50,7 +50,7 @@ class CalendarHeader extends StatelessWidget {
               titleWidget(context),
             IconButton(
               onPressed: onPressPrevious,
-              icon: const Icon(Icons.arrow_back),
+              icon: const Icon(Icons.arrow_back_ios),
               color: headerModel?.iconsColor ?? Colors.black,
               splashRadius: 20,
             ),
@@ -60,7 +60,7 @@ class CalendarHeader extends StatelessWidget {
               onPressed: onPressNext,
               splashRadius: 20,
               icon: Icon(
-                Icons.arrow_forward,
+                Icons.arrow_forward_ios,
                 color: headerModel?.iconsColor ?? Colors.black,
               ),
             ),
