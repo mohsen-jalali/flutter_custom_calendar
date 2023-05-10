@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
 import 'package:flutter_custom_calendar/src/utils/context_extensions.dart';
+import 'package:flutter_custom_calendar/src/utils/helper_functions.dart';
 import 'package:flutter_custom_calendar/src/widgets/base_calendar_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_day_widget.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -70,8 +71,7 @@ class CalendarLinearWidgetState
                       provider.selectedSingleDate == calendarDates[index],
                   isOverFlow: provider.calendarDateTime.month !=
                       calendarDates[index].month,
-                  onSelectDate: () =>
-                      selectDate(calendarDates[index]),
+                  onSelectDate: () => selectDate(calendarDates[index]),
                 ),
               ),
             ),
@@ -85,6 +85,14 @@ class CalendarLinearWidgetState
   void dispose() {
     scrollController.dispose();
     super.dispose();
+  }
+
+  @override
+  void initialization() {
+    super.initialization();
+    postFrameCallback(() {
+      updateScrollPosition();
+    });
   }
 
   @override
