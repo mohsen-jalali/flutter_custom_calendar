@@ -14,8 +14,11 @@ class CalendarDayModel {
   /// The TextStyle of selected day, is customized by [selectedStyle].
   final TextStyle? selectedStyle;
 
-  /// The TextStyle of disable days day which includes past days, is customized by [disableStyle].
+  /// The TextStyle of disable days which includes past days, is customized by [disableStyle].
   final TextStyle? disableStyle;
+
+  /// The TextStyle of current day which includes past days, is customized by [todayStyle].
+  final TextStyle? todayStyle;
 
   /// The Decoration of of normal enable days, is customized by [decoration].
   final Decoration? decoration;
@@ -25,6 +28,9 @@ class CalendarDayModel {
 
   /// The Decoration of of selected day, is customized by [disableDecoration].
   final Decoration? disableDecoration;
+
+  /// The Decoration of of current day, is customized by [todayDecoration].
+  final Decoration? todayDecoration;
 
   /// The padding day widget, can be set by [padding].
   final EdgeInsets? padding;
@@ -57,6 +63,8 @@ class CalendarDayModel {
       shape: BoxShape.circle,
     ),
     this.disableDecoration,
+    this.todayStyle,
+    this.todayDecoration,
     this.tagBuilder,
     this.weekDayStyle,
     this.isDisableDay,

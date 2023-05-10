@@ -92,6 +92,9 @@ class CalendarDayWidget extends StatelessWidget {
     if (isSelected) {
       return calendarDayModel.selectedDecoration;
     }
+    if(calendarDateTime.isToday){
+      return calendarDayModel.todayDecoration;
+    }
     return calendarDayModel.decoration;
   }
 
@@ -101,6 +104,9 @@ class CalendarDayWidget extends StatelessWidget {
     }
     if (isSelected) {
       return calendarDayModel.selectedStyle;
+    }
+    if(calendarDateTime.isToday){
+      return calendarDayModel.todayStyle;
     }
     return calendarDayModel.style;
   }
