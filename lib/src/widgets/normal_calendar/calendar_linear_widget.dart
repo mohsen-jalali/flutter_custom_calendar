@@ -110,7 +110,8 @@ class CalendarLinearWidgetState
   }
 
   void updateScrollPosition(double calendarWidth) {
-    double dayWidth = widget.calendarDayModel.width;
+    double dayWidth = widget.calendarDayModel.width +
+        (widget.calendarDayModel.padding?.horizontal ?? 0);
     double offset = dayWidth * ((provider.selectedSingleDate?.day ?? 1) - 1) -
         calendarWidth / 2 +
         dayWidth / 2;
