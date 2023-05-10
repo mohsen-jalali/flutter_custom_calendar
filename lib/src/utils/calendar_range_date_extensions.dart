@@ -4,7 +4,10 @@ import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.d
 
 extension PickedRangeExtensions on PickedRange {
   bool isInRange(CalendarDateTime dateTime) {
-    if (dateTime.isAfter(startDate) == 1 && dateTime.isAfter(endDate) == -1) {
+    if(startDate == null || endDate == null) {
+      return false;
+    }
+    if (dateTime.isAfter(startDate!) == 1 && dateTime.isAfter(endDate!) == -1) {
       return true;
     }
     return false;
@@ -25,6 +28,9 @@ extension PickedRangeExtensions on PickedRange {
   }
 
   int get rangeInDays{
-    return startDate.differenceInDays(endDate) + 1;
+    if(startDate == null || endDate == null){
+      return 0;
+    }
+    return startDate!.differenceInDays(endDate!) + 1;
   }
 }
