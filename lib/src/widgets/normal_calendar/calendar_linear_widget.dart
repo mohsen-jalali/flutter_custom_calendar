@@ -1,188 +1,133 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/src/provider/calendar_provider.dart';
-import 'package:flutter_custom_calendar/src/utils/helper_functions.dart';
-import 'package:flutter_custom_calendar/src/utils/calendar_date_time_extension.dart';
+import 'package:flutter_custom_calendar/src/widgets/base_calendar_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_day_widget.dart';
-import 'package:flutter_custom_calendar/src/widgets/calendar_header.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
-import 'package:scoped_model/scoped_model.dart';
 
-class CalendarLinearWidget extends StatefulWidget {
+class CalendarLinearWidget extends BaseCalendarWidget {
   final CalendarType calendarType;
-  final CalendarDateTime? selectedDate;
-  final Function(CalendarDateTime)? onSelectDate;
   final CalendarDayModel calendarDayModel;
-  final HeaderModel? headerModel;
-  final CalendarMode calendarMode;
   final bool showOverflowDays;
-  final EdgeInsets? padding;
 
   const CalendarLinearWidget({
     Key? key,
     required this.calendarType,
-    required this.calendarMode,
     required this.showOverflowDays,
     required this.calendarDayModel,
-    this.selectedDate,
-    this.onSelectDate,
-    this.headerModel,
-    this.padding,
-  }) : super(key: key);
+    required CalendarMode calendarMode,
+    CalendarDateTime? selectedDate,
+    Function(CalendarDateTime)? onSelectDate,
+    HeaderModel? headerModel,
+    EdgeInsets? padding,
+    DateTime? maxDate,
+    DateTime? minDate,
+    TextStyle? weekDayStyle,
+    EdgeInsets? calendarPadding,
+  }) : super(
+          key: key,
+          calendarMode: calendarMode,
+          selectedDate: selectedDate,
+          headerModel: headerModel,
+          maxDate: maxDate,
+          minDate: minDate,
+          onSelectDate: onSelectDate,
+          padding: padding,
+          weekDayStyle: weekDayStyle,
+          hasWeekDayTitle: false,
+          calendarPadding: calendarPadding,
+        );
 
   @override
   State<CalendarLinearWidget> createState() => CalendarLinearWidgetState();
 }
 
-class CalendarLinearWidgetState extends State<CalendarLinearWidget> {
+class CalendarLinearWidgetState
+    extends BaseCalendarWidgetState<CalendarLinearWidget> {
   ScrollController scrollController = ScrollController();
-  PageController pageController = PageController(initialPage: 1000000);
-  int currentPage = 1000000;
-  List<CalendarDateTime> calendarDates = [];
-
-  CalendarProvider get provider => ScopedModel.of<CalendarProvider>(context);
 
   @override
-  void didUpdateWidget(covariant CalendarLinearWidget oldWidget) {
-    super.didUpdateWidget(oldWidget);
-    if (provider.calendarMode != oldWidget.calendarMode) {
-      initialization();
-    }
-  }
-
-  @override
-  Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => Column(
-        children: [
-          CalendarHeader(
-            calendarDateTime: provider.calendarDateTime,
-            onPressNext: () {
-              pageController.nextPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut);
-            },
-            onPressPrevious: () {
-              pageController.previousPage(
-                  duration: const Duration(milliseconds: 300),
-                  curve: Curves.easeInOut);
-            },
-            onPressCurrentDate: () => selectCurrentDate(constraints.maxWidth),
-            headerModel: widget.headerModel,
-          ),
-          Container(
-            padding: widget.padding,
-            height: widget.calendarDayModel.height + (widget.calendarDayModel.padding?.bottom ?? 0),
-            width: MediaQuery.of(context).size.width,
-            child: PageView.builder(
-              controller: pageController,
-              physics: const NeverScrollableScrollPhysics(),
-              onPageChanged: (pageIndex) => onPageChanged(pageIndex),
-              itemBuilder: (context, index) => ListView.builder(
-                itemCount: calendarDates.length,
-                controller: scrollController,
-                scrollDirection: Axis.horizontal,
-                itemBuilder: (context, index) {
-                  return AnimationConfiguration.staggeredList(
-                    position: index,
-                    duration: const Duration(milliseconds: 100),
-                    child: ScaleAnimation(
-                      child: FadeInAnimation(
-                        child: CalendarDayWidget(
-                          calendarDateTime: calendarDates[index],
-                          calendarDayModel: widget.calendarDayModel,
-                          showOverFlowDays: false,
-                          showWeekdayTitle: true,
-                          isSelected:
-                              provider.selectedSingleDate == calendarDates[index],
-                          isOverFlow: provider.calendarDateTime.month !=
-                              calendarDates[index].month,
-                          onSelectDate: () => selectDate(calendarDates[index],constraints.maxWidth),
-                        ),
-                      ),
-                    ),
-                  );
-                },
+  Widget body(BuildContext context, BoxConstraints constraints) {
+    return PageView.builder(
+      controller: pageController,
+      onPageChanged: onPageChanged,
+      itemBuilder: (context, index) => ListView.builder(
+        itemCount: calendarDates.length,
+        controller: scrollController,
+        scrollDirection: Axis.horizontal,
+        itemBuilder: (context, index) {
+          return AnimationConfiguration.staggeredList(
+            position: index,
+            duration: const Duration(milliseconds: 100),
+            child: ScaleAnimation(
+              child: FadeInAnimation(
+                child: CalendarDayWidget(
+                  calendarDateTime: calendarDates[index],
+                  calendarDayModel: widget.calendarDayModel,
+                  showOverFlowDays: false,
+                  showWeekdayTitle: true,
+                  isSelected:
+                      provider.selectedSingleDate == calendarDates[index],
+                  isOverFlow: provider.calendarDateTime.month !=
+                      calendarDates[index].month,
+                  onSelectDate: () =>
+                      selectDate(calendarDates[index], constraints.maxWidth),
+                ),
               ),
             ),
-          )
-        ],
+          );
+        },
       ),
     );
   }
 
   @override
-  void initState() {
-    initialization();
-    super.initState();
+  void dispose() {
+    scrollController.dispose();
+    super.dispose();
   }
 
   @override
-  void dispose() {
-    super.dispose();
-    pageController.dispose();
-    scrollController.dispose();
-  }
-
-  void initialization() {
-    postFrameCallback(() {
-      getCalendarDates();
-    });
-  }
-
-  void getCalendarDates() {
-    calendarDates = provider.getDateList();
-    setState(() {});
-  }
-
   void nextPage() {
-    provider.nextMonth();
-    getCalendarDates();
+    super.previousPage();
+    resetScrollController();
   }
 
+  @override
   void previousPage() {
-    provider.previousMonth();
-    getCalendarDates();
+    super.previousPage();
+    resetScrollController();
   }
 
-  void onPageChanged(int pageIndex) {
-    if (currentPage < pageIndex) {
-      nextPage();
-    } else {
-      previousPage();
-    }
-    currentPage = pageIndex;
-  }
-
+  @override
   void selectCurrentDate(double calendarWidth) {
-    provider.selectCurrentDate();
-    getCalendarDates();
-    widget.onSelectDate?.call(provider.selectedSingleDate);
+    super.selectCurrentDate(calendarWidth);
     updateScrollPosition(calendarWidth);
   }
 
-  void updateScrollPosition(double calendarWidth){
+  void resetScrollController() {
+    scrollController.animateTo(0,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+  }
+
+  void updateScrollPosition(double calendarWidth) {
     double dayWidth = widget.calendarDayModel.width;
-    double offset = dayWidth * (provider.selectedSingleDate.day - 1) - calendarWidth/2 + dayWidth/2;
-    scrollController.animateTo(offset, duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
+    double offset = dayWidth * ((provider.selectedSingleDate?.day ?? 1) - 1) -
+        calendarWidth / 2 +
+        dayWidth / 2;
+    scrollController.animateTo(offset,
+        duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
-  void selectDate(CalendarDateTime selectedDate,double calendarWidth) {
-    provider.selectDate(selectedDate);
-    if (selectedDate.month != provider.calendarDateTime.month) {
-      if (selectedDate.isAfter(provider.calendarDateTime) == 1) {
-        pageController.nextPage(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut);
-      } else {
-        pageController.previousPage(
-            duration: const Duration(milliseconds: 300),
-            curve: Curves.easeInOut);
-      }
-    }
-    widget.onSelectDate?.call(selectedDate);
+  @override
+  void selectDate(CalendarDateTime selectedDate, double calendarWidth) {
+    super.selectDate(selectedDate, calendarWidth);
     updateScrollPosition(calendarWidth);
-    setState(() {});
   }
 
+  @override
+  double get calendarHeight =>
+      widget.calendarDayModel.height +
+      (widget.calendarDayModel.padding?.bottom ?? 0) +
+      (widget.calendarDayModel.padding?.top ?? 0) +
+      48;
 }

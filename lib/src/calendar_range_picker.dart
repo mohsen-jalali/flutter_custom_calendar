@@ -22,7 +22,7 @@ class CustomCalendarRangePicker extends StatefulWidget {
   ///
   /// [CalendarDateTime] is a class to save date properties (day,month,year) in a
   ///  object in order to use it with different types of calendars.
-  final PickedRange selectedRange;
+  final PickedRange? selectedRange;
 
   /// Call back function for changing selected Range.
   final Function(PickedRange)? onSelectRangeDates;
@@ -57,7 +57,7 @@ class CustomCalendarRangePicker extends StatefulWidget {
 
   const CustomCalendarRangePicker({
     Key? key,
-    required this.selectedRange,
+    this.selectedRange,
     this.calendarType = CalendarType.gregorian,
     this.calendarRangeDayModel = const CalendarRangeDayModel(),
     this.backgroundColor,
@@ -105,7 +105,7 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
     calendarProvider = CalendarProvider.createInstance(
       calendarType: widget.calendarType,
       selectedDateModel: SelectedDateModel(
-          rangeDates: widget.selectedRange,
+          rangeDates: widget.selectedRange ?? PickedRange(),
           singleDate: CalendarDateTime.fromDateTime(DateTime.now())),
       calendarMode: CalendarMode.monthlyTable,
       selectionMode: CalendarSelectionMode.range,
