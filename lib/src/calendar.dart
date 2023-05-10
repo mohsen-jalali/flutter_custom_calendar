@@ -59,6 +59,8 @@ class CustomCalendar extends StatefulWidget {
   /// List should includes of seven String which represents 12 month's titles.
   final List<String>? monthTitles;
 
+  final bool disableCalendarModeChange;
+
   const CustomCalendar({
     Key? key,
     this.calendarType = CalendarType.gregorian,
@@ -73,6 +75,7 @@ class CustomCalendar extends StatefulWidget {
     this.calendarMode = CalendarMode.monthlyTable,
     this.weekDaysTitles,
     this.monthTitles,
+    this.disableCalendarModeChange = false,
   }) : super(key: key);
 
   @override
@@ -176,6 +179,7 @@ class _CustomCalendarState extends State<CustomCalendar> {
                     padding: widget.padding,
                     calendarPadding: widget.padding,
                     weekDayStyle: widget.calendarDayModel.weekDayStyle,
+                    disableCalendarModeChange: widget.disableCalendarModeChange,
                   );
               }
             },

@@ -8,19 +8,19 @@ class CalendarTableWidget extends BaseCalendarWidget {
   final CalendarType calendarType;
   final CalendarDayModel calendarDayModel;
   final bool showOverflowDays;
+  final bool disableCalendarModeChange;
 
   const CalendarTableWidget({
     Key? key,
     required this.calendarType,
     required this.showOverflowDays,
     required this.calendarDayModel,
+    required this.disableCalendarModeChange,
     required CalendarMode calendarMode,
     CalendarDateTime? selectedDate,
     Function(CalendarDateTime)? onSelectDate,
     HeaderModel? headerModel,
     EdgeInsets? padding,
-    DateTime? maxDate,
-    DateTime? minDate,
     TextStyle? weekDayStyle,
     EdgeInsets? calendarPadding,
   }) : super(
@@ -28,12 +28,10 @@ class CalendarTableWidget extends BaseCalendarWidget {
           calendarMode: calendarMode,
           selectedDate: selectedDate,
           headerModel: headerModel,
-          maxDate: maxDate,
-          minDate: minDate,
           onSelectDate: onSelectDate,
           padding: padding,
           weekDayStyle: weekDayStyle,
-    calendarPadding: calendarPadding,
+          calendarPadding: calendarPadding,
         );
 
   @override
@@ -86,8 +84,7 @@ class CalendarTableWidgetState
                         provider.selectedSingleDate == calendarDates[index],
                     isOverFlow: provider.calendarDateTime.month !=
                         calendarDates[index].month,
-                    onSelectDate: () =>
-                        selectDate(calendarDates[index]),
+                    onSelectDate: () => selectDate(calendarDates[index]),
                   ),
                 ),
               ),
@@ -99,6 +96,8 @@ class CalendarTableWidgetState
   }
 
   void onChangedCalendarMode(DragUpdateDetails details) {
+    if (widget.disableCalendarModeChange) return;
+
     ///Swiping up to change calendar mode to weekly
     if (details.delta.dy < -10) {
       provider.changeCalendarMode(CalendarMode.weekly);
