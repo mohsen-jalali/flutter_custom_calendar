@@ -52,7 +52,7 @@ class CalendarRangeWidget extends BaseCalendarWidget {
 class CalendarRangeWidgetState
     extends BaseCalendarWidgetState<CalendarRangeWidget> {
   @override
-  Widget body(BuildContext context, BoxConstraints constraints) {
+  Widget body(BuildContext context) {
     return PageView.builder(
       controller: pageController,
       onPageChanged: (pageIndex) => onPageChanged(pageIndex),
@@ -77,7 +77,7 @@ class CalendarRangeWidgetState
                   isOverFlow: provider.calendarDateTime.month !=
                       calendarDates[index].month,
                   onSelectDate: () =>
-                      selectDate(calendarDates[index], constraints.maxWidth),
+                      selectDate(calendarDates[index]),
                   status: dayStatus(calendarDates[index]),
                 ),
               ),
@@ -114,7 +114,7 @@ class CalendarRangeWidgetState
   }
 
   @override
-  void selectDate(CalendarDateTime selectedDate, double calendarWidth) {
+  void selectDate(CalendarDateTime selectedDate) {
     provider.selectDate(selectedDate);
     widget.onSelectRange?.call(provider.selectedRangeDates!);
     setState(() {});

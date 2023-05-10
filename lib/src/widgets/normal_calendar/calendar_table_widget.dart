@@ -57,7 +57,7 @@ class CalendarTableWidgetState
   }
 
   @override
-  Widget body(BuildContext context, BoxConstraints constraints) {
+  Widget body(BuildContext context) {
     return GestureDetector(
       onPanUpdate: onChangedCalendarMode,
       child: PageView.builder(
@@ -87,7 +87,7 @@ class CalendarTableWidgetState
                     isOverFlow: provider.calendarDateTime.month !=
                         calendarDates[index].month,
                     onSelectDate: () =>
-                        selectDate(calendarDates[index], constraints.maxWidth),
+                        selectDate(calendarDates[index]),
                   ),
                 ),
               ),

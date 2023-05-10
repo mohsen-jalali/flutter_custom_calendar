@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
+import 'package:flutter_custom_calendar/src/utils/context_extensions.dart';
 import 'package:flutter_custom_calendar/src/widgets/base_calendar_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/normal_calendar/calendar_day_widget.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -46,7 +47,7 @@ class CalendarLinearWidgetState
   ScrollController scrollController = ScrollController();
 
   @override
-  Widget body(BuildContext context, BoxConstraints constraints) {
+  Widget body(BuildContext context) {
     return PageView.builder(
       controller: pageController,
       onPageChanged: onPageChanged,
@@ -70,7 +71,7 @@ class CalendarLinearWidgetState
                   isOverFlow: provider.calendarDateTime.month !=
                       calendarDates[index].month,
                   onSelectDate: () =>
-                      selectDate(calendarDates[index], constraints.maxWidth),
+                      selectDate(calendarDates[index]),
                 ),
               ),
             ),
@@ -99,9 +100,9 @@ class CalendarLinearWidgetState
   }
 
   @override
-  void selectCurrentDate(double calendarWidth) {
-    super.selectCurrentDate(calendarWidth);
-    updateScrollPosition(calendarWidth);
+  void selectCurrentDate() {
+    super.selectCurrentDate();
+    updateScrollPosition();
   }
 
   void resetScrollController() {
@@ -109,20 +110,20 @@ class CalendarLinearWidgetState
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
-  void updateScrollPosition(double calendarWidth) {
+  void updateScrollPosition() {
     double dayWidth = widget.calendarDayModel.width +
         (widget.calendarDayModel.padding?.horizontal ?? 0);
     double offset = dayWidth * ((provider.selectedSingleDate?.day ?? 1) - 1) -
-        calendarWidth / 2 +
+        context.screenWidth / 2 +
         dayWidth / 2;
     scrollController.animateTo(offset,
         duration: const Duration(milliseconds: 300), curve: Curves.easeInOut);
   }
 
   @override
-  void selectDate(CalendarDateTime selectedDate, double calendarWidth) {
-    super.selectDate(selectedDate, calendarWidth);
-    updateScrollPosition(calendarWidth);
+  void selectDate(CalendarDateTime selectedDate) {
+    super.selectDate(selectedDate);
+    updateScrollPosition();
   }
 
   @override

@@ -70,37 +70,35 @@ abstract class BaseCalendarWidgetState<T extends BaseCalendarWidget>
 
   @override
   Widget build(BuildContext context) {
-    return LayoutBuilder(
-      builder: (context, constraints) => CalendarContainerWidget(
-        weekDayStyle: widget.weekDayStyle,
-        padding: widget.padding,
-        calendarHeight: calendarHeight +
-            (widget.calendarPadding?.bottom ?? 0) +
-            (widget.calendarPadding?.top ?? 0),
-        onTapNext: () {
-          if (isNextPageEnable) {
-            pageController.nextPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut);
-          }
-        },
-        onTapPrevious: () {
-          if (isPreviousPageEnable) {
-            pageController.previousPage(
-                duration: const Duration(milliseconds: 300),
-                curve: Curves.easeInOut);
-          }
-        },
-        onSelectCurrentDate: () => selectCurrentDate(constraints.maxWidth),
-        hasWeekDayTitle: widget.hasWeekDayTitle,
-        refreshCalendar: initialization,
-        headerModel: widget.headerModel,
-        calendarWidget: body(context, constraints),
-      ),
+    return CalendarContainerWidget(
+      weekDayStyle: widget.weekDayStyle,
+      padding: widget.padding,
+      calendarHeight: calendarHeight +
+          (widget.calendarPadding?.bottom ?? 0) +
+          (widget.calendarPadding?.top ?? 0),
+      onTapNext: () {
+        if (isNextPageEnable) {
+          pageController.nextPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut);
+        }
+      },
+      onTapPrevious: () {
+        if (isPreviousPageEnable) {
+          pageController.previousPage(
+              duration: const Duration(milliseconds: 300),
+              curve: Curves.easeInOut);
+        }
+      },
+      onSelectCurrentDate: () => selectCurrentDate(),
+      hasWeekDayTitle: widget.hasWeekDayTitle,
+      refreshCalendar: initialization,
+      headerModel: widget.headerModel,
+      calendarWidget: body(context),
     );
   }
 
-  Widget body(BuildContext context, BoxConstraints constraints);
+  Widget body(BuildContext context);
 
   @override
   void initState() {
@@ -161,13 +159,13 @@ abstract class BaseCalendarWidgetState<T extends BaseCalendarWidget>
     }
   }
 
-  void selectCurrentDate(double calendarWidth) {
+  void selectCurrentDate() {
     provider.selectCurrentDate();
     getCalendarDates();
     widget.onSelectDate?.call(provider.selectedSingleDate!);
   }
 
-  void selectDate(CalendarDateTime selectedDate, double calendarWidth) {
+  void selectDate(CalendarDateTime selectedDate) {
     provider.selectDate(selectedDate);
     if (selectedDate.month != provider.calendarDateTime.month) {
       if (selectedDate.isAfter(provider.calendarDateTime) == 1) {
