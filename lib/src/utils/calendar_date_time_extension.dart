@@ -61,7 +61,14 @@ extension CalendarDateTimeExtension on CalendarDateTime {
     return DateTime(year, month, day);
   }
 
-  int isAfter(CalendarDateTime dateTime) {
+  int isAfterDateTime(DateTime dateTime) {
+    CalendarDateTime calendarDateTime = CalendarDateTime.fromDateTime(dateTime)
+        .changeCalendarType(calendarType);
+    return isAfter(calendarDateTime);
+  }
+
+  int isAfter(CalendarDateTime? dateTime) {
+    if(dateTime == null) return 0;
     if (year > dateTime.year) {
       return 1;
     } else if (year < dateTime.year) {
