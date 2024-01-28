@@ -148,42 +148,40 @@ class _CustomCalendarState extends State<CustomCalendar> {
       model: calendarProvider,
       child: Material(
         color: Colors.transparent,
-        child: Container(
-          decoration: widget.calendarDecoration,
-          child: ScopedModelDescendant<CalendarProvider>(
-            builder: (context, child, provider) {
-              switch (provider.calendarMode) {
-                case CalendarMode.monthlyLinear:
-                  return CalendarLinearWidget(
-                    key: linearStateKey,
-                    showOverflowDays: widget.showOverFlowDays,
-                    calendarMode: provider.calendarMode,
-                    calendarType: widget.calendarType,
-                    selectedDate: widget.selectedDate,
-                    headerModel: widget.headerModel,
-                    calendarDayModel: widget.calendarDayModel,
-                    onSelectDate: widget.onSelectDate,
-                    padding: widget.padding,
-                    calendarPadding: widget.padding,
-                  );
-                default:
-                  return CalendarTableWidget(
-                    key: monthlyStateKey,
-                    showOverflowDays: widget.showOverFlowDays,
-                    calendarMode: provider.calendarMode,
-                    calendarType: widget.calendarType,
-                    selectedDate: widget.selectedDate,
-                    headerModel: widget.headerModel,
-                    calendarDayModel: widget.calendarDayModel,
-                    onSelectDate: widget.onSelectDate,
-                    padding: widget.padding,
-                    calendarPadding: widget.padding,
-                    weekDayStyle: widget.calendarDayModel.weekDayStyle,
-                    disableCalendarModeChange: widget.disableCalendarModeChange,
-                  );
-              }
-            },
-          ),
+        child: ScopedModelDescendant<CalendarProvider>(
+          builder: (context, child, provider) {
+            switch (provider.calendarMode) {
+              case CalendarMode.monthlyLinear:
+                return CalendarLinearWidget(
+                  key: linearStateKey,
+                  showOverflowDays: widget.showOverFlowDays,
+                  calendarMode: provider.calendarMode,
+                  calendarType: widget.calendarType,
+                  selectedDate: widget.selectedDate,
+                  headerModel: widget.headerModel,
+                  calendarDayModel: widget.calendarDayModel,
+                  onSelectDate: widget.onSelectDate,
+                  padding: widget.padding,
+                  calendarPadding: widget.padding,
+                );
+              default:
+                return CalendarTableWidget(
+                  key: monthlyStateKey,
+                  calendarDecoration: widget.calendarDecoration,
+                  showOverflowDays: widget.showOverFlowDays,
+                  calendarMode: provider.calendarMode,
+                  calendarType: widget.calendarType,
+                  selectedDate: widget.selectedDate,
+                  headerModel: widget.headerModel,
+                  calendarDayModel: widget.calendarDayModel,
+                  onSelectDate: widget.onSelectDate,
+                  padding: widget.padding,
+                  calendarPadding: widget.padding,
+                  weekDayStyle: widget.calendarDayModel.weekDayStyle,
+                  disableCalendarModeChange: widget.disableCalendarModeChange,
+                );
+            }
+          },
         ),
       ),
     );

@@ -16,6 +16,7 @@ abstract class BaseCalendarWidget extends StatefulWidget {
   final TextStyle? weekDayStyle;
   final bool hasWeekDayTitle;
   final EdgeInsets? calendarPadding;
+  final Decoration? calendarDecoration;
 
   const BaseCalendarWidget({
     Key? key,
@@ -27,6 +28,7 @@ abstract class BaseCalendarWidget extends StatefulWidget {
     this.weekDayStyle,
     this.calendarPadding,
     this.hasWeekDayTitle = true,
+    this.calendarDecoration,
   }) : super(key: key);
 }
 
@@ -45,18 +47,19 @@ abstract class BaseCalendarWidgetState<T extends BaseCalendarWidget>
     return CalendarContainerWidget(
       weekDayStyle: widget.weekDayStyle,
       padding: widget.padding,
+      decoration: widget.calendarDecoration,
       calendarHeight: calendarHeight +
           (widget.calendarPadding?.bottom ?? 0) +
           (widget.calendarPadding?.top ?? 0),
       onTapNext: () {
-          pageController.nextPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut);
+        pageController.nextPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
       },
       onTapPrevious: () {
-          pageController.previousPage(
-              duration: const Duration(milliseconds: 300),
-              curve: Curves.easeInOut);
+        pageController.previousPage(
+            duration: const Duration(milliseconds: 300),
+            curve: Curves.easeInOut);
       },
       onSelectCurrentDate: () => selectCurrentDate(),
       hasWeekDayTitle: widget.hasWeekDayTitle,

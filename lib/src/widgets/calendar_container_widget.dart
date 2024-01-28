@@ -19,6 +19,7 @@ class CalendarContainerWidget extends StatefulWidget {
   final EdgeInsets? padding;
   final double calendarHeight;
   final VoidCallback refreshCalendar;
+  final Decoration? decoration;
 
   const CalendarContainerWidget({
     Key? key,
@@ -32,6 +33,7 @@ class CalendarContainerWidget extends StatefulWidget {
     required this.padding,
     required this.calendarHeight,
     required this.refreshCalendar,
+    this.decoration,
   }) : super(key: key);
 
   @override
@@ -73,72 +75,82 @@ class _CalendarContainerWidgetState extends State<CalendarContainerWidget> {
           onPressBackOnMenu: onCloseMenu,
           isSelectionMenu: selectionMenu != SelectionMenuEnum.none,
         ),
-        if (widget.hasWeekDayTitle && selectionMenu == SelectionMenuEnum.none)
-          RowCalendarWeekDayTitle(
-            calendarType: context.provider.calendarType,
-            textStyle: widget.weekDayStyle,
+        Container(
+          decoration: widget.decoration,
+          child: Column(
+            children: [
+              if (widget.hasWeekDayTitle &&
+                  selectionMenu == SelectionMenuEnum.none)
+                RowCalendarWeekDayTitle(
+                  calendarType: context.provider.calendarType,
+                  textStyle: widget.weekDayStyle,
+                ),
+              AnimatedContainer(
+                height: containerHeight,
+                padding: widget.padding,
+                width: context.screenWidth,
+                duration: const Duration(milliseconds: 300),
+                child: Builder(
+                  builder: (context) {
+                    switch (selectionMenu) {
+                      case SelectionMenuEnum.none:
+                        return widget.calendarWidget;
+                      case SelectionMenuEnum.year:
+                        return Center(
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 8,
+                              crossAxisSpacing: 8,
+                              mainAxisExtent: 48,
+                            ),
+                            controller: _scrollController,
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 8, vertical: 8),
+                            itemCount: years.length,
+                            itemBuilder: (context, index) => _menuOptionWidget(
+                              isSelected:
+                                  context.provider.calendarDateTime.year ==
+                                      years[index],
+                              index: index,
+                              title: years[index].toString(),
+                              onPress: () => onSelectYear(years[index]),
+                            ),
+                          ),
+                        );
+                      default:
+                        return Center(
+                          child: GridView.builder(
+                            gridDelegate:
+                                const SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              mainAxisSpacing: 8,
+                              crossAxisSpacing: 8,
+                              mainAxisExtent: 48,
+                            ),
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 8,
+                              vertical: 8,
+                            ),
+                            itemCount: 12,
+                            itemBuilder: (context, index) => _menuOptionWidget(
+                              isSelected:
+                                  context.provider.calendarDateTime.month ==
+                                      index + 1,
+                              index: index,
+                              title: CalendarUtils.monthsTitles[index],
+                              onPress: () => onSelectMonth(index + 1),
+                            ),
+                          ),
+                        );
+                    }
+                  },
+                ),
+              )
+            ],
           ),
-        AnimatedContainer(
-          height: containerHeight,
-          padding: widget.padding,
-          width: context.screenWidth,
-          duration: const Duration(milliseconds: 300),
-          child: Builder(
-            builder: (context) {
-              switch (selectionMenu) {
-                case SelectionMenuEnum.none:
-                  return widget.calendarWidget;
-                case SelectionMenuEnum.year:
-                  return Center(
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
-                        mainAxisExtent: 48,
-                      ),
-                      controller: _scrollController,
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 8, vertical: 8),
-                      itemCount: years.length,
-                      itemBuilder: (context, index) => _menuOptionWidget(
-                        isSelected: context.provider.calendarDateTime.year ==
-                            years[index],
-                        index: index,
-                        title: years[index].toString(),
-                        onPress: () => onSelectYear(years[index]),
-                      ),
-                    ),
-                  );
-                default:
-                  return Center(
-                    child: GridView.builder(
-                      gridDelegate:
-                          const SliverGridDelegateWithFixedCrossAxisCount(
-                        crossAxisCount: 3,
-                        mainAxisSpacing: 8,
-                        crossAxisSpacing: 8,
-                        mainAxisExtent: 48,
-                      ),
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 8,
-                        vertical: 8,
-                      ),
-                      itemCount: 12,
-                      itemBuilder: (context, index) => _menuOptionWidget(
-                        isSelected: context.provider.calendarDateTime.month ==
-                            index + 1,
-                        index: index,
-                        title: CalendarUtils.monthsTitles[index],
-                        onPress: () => onSelectMonth(index + 1),
-                      ),
-                    ),
-                  );
-              }
-            },
-          ),
-        )
+        ),
       ],
     );
   }

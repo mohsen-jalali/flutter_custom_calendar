@@ -23,6 +23,7 @@ class CalendarTableWidget extends BaseCalendarWidget {
     EdgeInsets? padding,
     TextStyle? weekDayStyle,
     EdgeInsets? calendarPadding,
+    Decoration? calendarDecoration,
   }) : super(
           key: key,
           calendarMode: calendarMode,
@@ -32,6 +33,7 @@ class CalendarTableWidget extends BaseCalendarWidget {
           padding: padding,
           weekDayStyle: weekDayStyle,
           calendarPadding: calendarPadding,
+          calendarDecoration: calendarDecoration,
         );
 
   @override
