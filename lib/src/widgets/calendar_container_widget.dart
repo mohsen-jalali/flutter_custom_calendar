@@ -81,9 +81,12 @@ class _CalendarContainerWidgetState extends State<CalendarContainerWidget> {
             children: [
               if (widget.hasWeekDayTitle &&
                   selectionMenu == SelectionMenuEnum.none)
-                RowCalendarWeekDayTitle(
-                  calendarType: context.provider.calendarType,
-                  textStyle: widget.weekDayStyle,
+                Container(
+                  padding: widget.padding,
+                  child: RowCalendarWeekDayTitle(
+                    calendarType: context.provider.calendarType,
+                    textStyle: widget.weekDayStyle,
+                  ),
                 ),
               AnimatedContainer(
                 height: containerHeight,
