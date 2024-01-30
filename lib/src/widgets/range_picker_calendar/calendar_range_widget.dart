@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_custom_calendar/flutter_custom_calendar.dart';
-import 'package:flutter_custom_calendar/src/utils/calendar_range_date_extensions.dart';
 import 'package:flutter_custom_calendar/src/widgets/base_calendar_widget.dart';
 import 'package:flutter_custom_calendar/src/widgets/range_picker_calendar/calendar_range_day_widget.dart';
 import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
@@ -24,12 +23,14 @@ class CalendarRangeWidget extends BaseCalendarWidget {
     EdgeInsets? padding,
     TextStyle? weekDayStyle,
     EdgeInsets? calendarPadding,
+    Decoration? calendarDecoration,
   }) : super(
           key: key,
           calendarMode: calendarMode,
           selectedDate: selectedDate,
           headerModel: headerModel,
           onSelectDate: onSelectDate,
+          calendarDecoration: calendarDecoration,
           padding: padding,
           weekDayStyle: weekDayStyle,
           hasWeekDayTitle: false,
@@ -67,8 +68,7 @@ class CalendarRangeWidgetState
                   showOverFlowDays: widget.showOverflowDays,
                   isOverFlow: provider.calendarDateTime.month !=
                       calendarDates[index].month,
-                  onSelectDate: () =>
-                      selectDate(calendarDates[index]),
+                  onSelectDate: () => selectDate(calendarDates[index]),
                   status: dayStatus(calendarDates[index]),
                 ),
               ),
