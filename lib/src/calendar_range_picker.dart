@@ -131,30 +131,15 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
       model: calendarProvider,
       child: Material(
         color: Colors.transparent,
-        child: Container(
-          clipBehavior: Clip.antiAlias,
-          decoration: widget.calendarDecoration ??
-              BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.circular(10),
-                boxShadow: [
-                  BoxShadow(
-                    color: Colors.black.withOpacity(0.1),
-                    spreadRadius: 0,
-                    blurRadius: 10,
-                  )
-                ],
-              ),
-          child: ScopedModelDescendant<CalendarProvider>(
-            builder: (context, child, provider) => CalendarRangeWidget(
-              showOverflowDays: widget.showOverFlowDays,
-              calendarMode: provider.calendarMode,
-              calendarType: widget.calendarType,
-              headerModel: widget.headerModel,
-              calendarRangeDayModel: widget.calendarRangeDayModel,
-              onSelectRange: widget.onSelectRangeDates,
-              padding: widget.padding,
-            ),
+        child: ScopedModelDescendant<CalendarProvider>(
+          builder: (context, child, provider) => CalendarRangeWidget(
+            showOverflowDays: widget.showOverFlowDays,
+            calendarMode: provider.calendarMode,
+            calendarType: widget.calendarType,
+            headerModel: widget.headerModel,
+            calendarRangeDayModel: widget.calendarRangeDayModel,
+            onSelectRange: widget.onSelectRangeDates,
+            padding: widget.padding,
           ),
         ),
       ),
