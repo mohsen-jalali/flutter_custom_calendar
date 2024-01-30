@@ -140,6 +140,7 @@ class _CustomCalendarRangePickerState extends State<CustomCalendarRangePicker> {
             calendarRangeDayModel: widget.calendarRangeDayModel,
             onSelectRange: widget.onSelectRangeDates,
             padding: widget.padding,
+            calendarDecoration: widget.calendarDecoration,
           ),
         ),
       ),
