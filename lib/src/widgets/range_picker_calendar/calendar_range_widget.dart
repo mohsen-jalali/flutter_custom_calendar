@@ -33,7 +33,6 @@ class CalendarRangeWidget extends BaseCalendarWidget {
           calendarDecoration: calendarDecoration,
           padding: padding,
           weekDayStyle: weekDayStyle,
-          hasWeekDayTitle: false,
           calendarPadding: calendarPadding,
         );
 
